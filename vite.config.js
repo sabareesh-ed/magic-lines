@@ -1,12 +1,9 @@
-import { defineConfig } from 'vite';
-import { resolve } from 'path';
+import { defineConfig } from 'vite'
 import glsl from 'vite-plugin-glsl';
 
+// vite.config.js
 export default defineConfig({
-  plugins: [
-    glsl(),
-  ],
-
+  plugins: [glsl()],
   server: {
     host: 'localhost',
     cors: '*',
@@ -15,25 +12,21 @@ export default defineConfig({
       protocol: 'ws',
     },
   },
-
   build: {
     minify: true,
     manifest: true,
     rollupOptions: {
-      // Define multiple entry points
-      input: {
-        main: resolve(__dirname, 'src/main.js'),
-        gsap: resolve(__dirname, 'src/gsap.js'),
-      },
+      input: './src/main.js',
       output: {
-        // Use ES modules for multi-entry builds
-        format: 'es',
-        // Preserve entry filenames
-        entryFileNames: '[name].js',
+        format: 'umd',
+        entryFileNames: 'main.js',
+        esModule: false,
+        compact: true,
+        globals: {
+          jquery: '$',
+        },
       },
-      external: [
-        'jquery',
-      ],
+      external: ['jquery'],
     },
   },
-});
+})
