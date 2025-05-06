@@ -26,15 +26,10 @@ export default defineConfig({
         gsap: resolve(__dirname, 'src/gsap.js'),
       },
       output: {
-        // Use UMD for each entry, with dynamic imports inlined to avoid code splitting
-        format: 'umd',
+        // Use ES modules for multi-entry builds
+        format: 'es',
+        // Preserve entry filenames
         entryFileNames: '[name].js',
-        inlineDynamicImports: true,
-        esModule: false,
-        compact: true,
-        globals: {
-          jquery: '$',
-        },
       },
       external: [
         'jquery',
