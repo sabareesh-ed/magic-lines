@@ -26,9 +26,10 @@ export default defineConfig({
         gsap: resolve(__dirname, 'src/gsap.js'),
       },
       output: {
+        // Use UMD for each entry, with dynamic imports inlined to avoid code splitting
         format: 'umd',
-        // Use [name] to preserve entry filenames (main.js, gsap.js)
         entryFileNames: '[name].js',
+        inlineDynamicImports: true,
         esModule: false,
         compact: true,
         globals: {
