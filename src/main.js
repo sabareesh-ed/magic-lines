@@ -1,99 +1,118 @@
-import './styles/style.css'
 import * as THREE from "three";
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { MeshLine, MeshLineGeometry, MeshLineMaterial } from "../MeshLine/index.js";
-import { UnrealBloomPass } from 'three/examples/jsm/postprocessing/UnrealBloomPass.js';
-import { EffectComposer } from 'three/examples/jsm/postprocessing/EffectComposer.js';
-import { RenderPass } from 'three/examples/jsm/postprocessing/RenderPass.js';
-const w = window.innerWidth;
-const h = window.innerHeight;
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import * as dat from 'dat.gui';
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
+
 const scene = new THREE.Scene();
-const camera = new THREE.PerspectiveCamera(75, w / h, 0.1, 1000);
-camera.position.z = 5;
-const canvas = document.querySelector('canvas.webgl');
-const renderer = new THREE.WebGLRenderer({canvas: canvas,  antialias: true });
-renderer.setSize(w, h);
-// document.body.appendChild(renderer.domElement);
+const canvas = document.querySelector(".webgl");
+const webglWrapper = document.querySelector(".webgl_wrapper");
+const camera = new THREE.PerspectiveCamera(10, webglWrapper.offsetWidth / webglWrapper.offsetHeight, 0.1, 100);
 
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.enableDamping = true;
-controls.dampingFactor = 0.03;
+const renderer = new THREE.WebGLRenderer({
+    canvas: canvas,
+    alpha: true,
+    antialias: true
+});
+renderer.setSize(webglWrapper.offsetWidth, webglWrapper.offsetHeight);
+webglWrapper.appendChild(renderer.domElement);
 
-// bloom UnrealBloomPass  
-const renderScene = new RenderPass(scene, camera);
-const bloomPass = new UnrealBloomPass(new THREE.Vector2(w, h), 1.5, 0.4, 0.85);
-// bloomPass.threshold = 0.1;
-// bloomPass.strength = 1.5;
-// bloomPass.radius = 0.1;
-const composer = new EffectComposer(renderer);
-composer.addPass(renderScene);
-composer.addPass(bloomPass);
+renderer.setClearColor(0x000000, 0);
 
+const gui = new dat.GUI();
 
-const texLoader = new THREE.TextureLoader();
+const modelPosition = {
+  x: 0,
+  y: -10.5,
+  z: 0
+};
 
-const linesGroup = new THREE.Group();
-linesGroup.userData.update = function (t) {
-  linesGroup.children.forEach((line) => line.userData.update(t));
-}
-scene.add(linesGroup);
+const envStudio = "https://cdn.jsdelivr.net/gh/sabareesh-ed/sail@main/shanghai_bund_2k.hdr";
+const rgbeLoader = new RGBELoader();
+rgbeLoader.load(envStudio, function (texture) {
+  texture.mapping = THREE.EquirectangularReflectionMapping;
+  scene.environment = texture;
+});
 
-function getMeshLine(index) {
-  const points = [];
-  const numPoints = 300;
-  for (let j = 0; j < numPoints; j += 1) {
-    let x = -7.5 + j * 0.05;
-    let y = Math.sin(j * 0.075);
-    points.push(x, y, 0);
-  }
-  const geometry = new MeshLineGeometry();
-  geometry.setPoints(points);
-  const hue = 0.65 - index * 0.02;
-  const lightness = 0.4 - index * 0.02;
-  const color = new THREE.Color().setHSL(hue, 1.0, lightness);
-  const material = new MeshLineMaterial({
-    color,
-    map: texLoader.load("https://cdn.jsdelivr.net/gh/bobbyroe/Animated-Line-Art@main/assets/strokes/stroke-02.png"),
-    useMap: true,
-    alphaTest: 0.5,
-    transparent: true,
-    resolution: new THREE.Vector2(w, h),
-    lineWidth: 0.5,
-    blending: THREE.AdditiveBlending,
-  });
+const loader = new GLTFLoader();
+let model;
 
-  const meshLine = new MeshLine(geometry, material);
-  const offset = index * 10;
-  const amplitude = 2;
-  const waveLength = 0.005;
-  meshLine.userData.update = function(t) {
-    for (let p = 0, len = points.length; p < len; p += 3) {
-      points[p + 1] = Math.sin((p - t + offset) * waveLength) * amplitude; // update y position only
+// Track loading progress
+loader.load('https://indigo-edge-assets.netlify.app/logo.glb', 
+    (gltf) => {
+        model = gltf.scene;
+        model.traverse((child) => {
+            if (child.isMesh) {
+                child.material = new THREE.MeshPhysicalMaterial({
+                   // color: 0xadd8e6,
+                    metalness: 0.3,
+                    roughness: 0.2,
+                    opacity: 0.8,
+                    transparent: true,
+                    clearcoat: 1,
+                    clearcoatRoughness: 0.1,
+                    ior: 1.5,
+                    envMapIntensity: 1,
+                    reflectivity: 1,
+                    transmission: 1,
+                });
+            }
+        });
+
+        scene.add(model);
+        model.rotation.set(0, 0.5, 0);
+        window.model = model;
+
+        gui.add(modelPosition, 'x', -50, 50).name('Position X');
+        gui.add(modelPosition, 'y', -50, 50).name('Position Y');
+        gui.add(modelPosition, 'z', -50, 50).name('Position Z');
+
+        // Once model is loaded, hide loading screen
+        
+        setTimeout(() => {
+          document.querySelector('.loading-screen').classList.add('loaded');
+        }, 500);
+        
+    },
+
+    // onProgress callback
+    (xhr) => {
+        const percent = (xhr.loaded / xhr.total) * 100;
+        document.querySelector('.loader-text').textContent = `${Math.round(percent)}%`;
+    },
+
+    // onError callback
+    (error) => {
+        console.error("An error occurred while loading the model", error);
     }
-    geometry.setPoints(points, (p) => 1);
-  };
-  return meshLine;
-}
-const numLines = 6;
-for (let i = 0; i < numLines; i += 1) {
-  const line = getMeshLine(i);
-  line.position.y = i * 0.1;
-  line.position.z = i * -0.2;
-  linesGroup.add(line);
+);
+
+camera.position.z = 30;
+camera.position.y = 8;
+camera.lookAt(0, 0, 0);
+
+function animate() {
+    requestAnimationFrame(animate);
+
+    if (model) {
+        model.position.set(modelPosition.x, modelPosition.y, modelPosition.z);
+    }
+
+    renderer.render(scene, camera);
 }
 
-function animate(t = 0) {
-  requestAnimationFrame(animate);
-  linesGroup.userData.update(t * 0.1);
-  composer.render(scene, camera);
-  controls.update();
+function updateRendererAndCamera() {
+    const width = webglWrapper.offsetWidth;
+    const height = webglWrapper.offsetHeight;
+    
+    renderer.setSize(width, height);
+    camera.aspect = width / height;
+    camera.updateProjectionMatrix();
 }
+
+// Trigger resize on window resize
+window.addEventListener('resize', updateRendererAndCamera);
+
+// Trigger resize on scroll
+window.addEventListener('scroll', updateRendererAndCamera);
 
 animate();
-
-function handleWindowResize() {
-  camera.aspect = window.innerWidth / window.innerHeight;
-  camera.updateProjectionMatrix();
-  renderer.setSize(window.innerWidth, window.innerHeight);
-}
-window.addEventListener('resize', handleWindowResize, false);
