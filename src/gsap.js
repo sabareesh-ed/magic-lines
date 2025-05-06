@@ -14,6 +14,8 @@ const absTitle2 = document.querySelector(".abs-title2");
 //window.scrollTo(0, 1);
 // gsap.to(window, { duration: 2, scrollTo: 0 });
 
+console.log("script loaded");
+
 if (heroTitle) {
   gsap.fromTo(
     ".scroll-prompt",

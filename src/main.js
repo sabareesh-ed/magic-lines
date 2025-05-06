@@ -26,6 +26,8 @@ const modelPosition = {
   z: 0
 };
 
+console.log("script loaded");
+
 const envStudio = "https://cdn.jsdelivr.net/gh/sabareesh-ed/sail@main/shanghai_bund_2k.hdr";
 const rgbeLoader = new RGBELoader();
 rgbeLoader.load(envStudio, function (texture) {
