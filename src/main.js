@@ -44,7 +44,7 @@ const loader = new GLTFLoader();
 let model;
 
 // Track loading progress
-loader.load('https://indigo-edge-assets.netlify.app/logo.glb', 
+loader.load('https://indigo-edge-assets.netlify.app/test-02.glb', 
     (gltf) => {
         model = gltf.scene;
         model.traverse((child) => {
