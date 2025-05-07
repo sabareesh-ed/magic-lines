@@ -13,7 +13,7 @@ const canvas = document.querySelector(".webgl");
 const webglWrapper = document.querySelector(".webgl_wrapper");
 const camera = new THREE.PerspectiveCamera(10, webglWrapper.offsetWidth / webglWrapper.offsetHeight, 0.1, 100);
 
-const renderer = new THREE.WebGLRenderer({
+const renderer = new THREE.WebGLRenderer({ 
     canvas: canvas,
     alpha: true,
     antialias: true
