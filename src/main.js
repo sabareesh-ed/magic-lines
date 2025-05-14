@@ -5,76 +5,155 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
 
+// ─── 3 JS Imports ──────────────────────────────────────────────────────
+import * as THREE        from 'three';
+import { GLTFLoader }    from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { RGBELoader }    from 'three/examples/jsm/loaders/RGBELoader.js';
+import dat               from 'dat.gui';
 
-// Three js imports here
-import * as THREE from 'three'
-import { GLTFLoader }  from 'three/examples/jsm/loaders/GLTFLoader.js'
-import { RGBELoader }  from 'three/examples/jsm/loaders/RGBELoader.js'
+// ─── Renderer / Scene / Camera ────────────────────────────────────
+const canvas   = document.querySelector('.webgl');
+const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
+renderer.outputEncoding = THREE.sRGBEncoding;
+renderer.toneMapping    = THREE.ACESFilmicToneMapping;
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setSize(window.innerWidth, window.innerHeight, false);
 
+const scene   = new THREE.Scene();
+const camera  = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.set(0, 0, 5);
+scene.add(camera);
 
+// helpers (toggle with GUI)
+const axes   = new THREE.AxesHelper(10);
+const camAid = new THREE.CameraHelper(camera);
+scene.add(axes, camAid);
 
+// ─── Optional HDRI ────────────────────────────────────────────────
+new RGBELoader().load(
+  'https://cdn.jsdelivr.net/gh/sabareesh-ed/sail@main/shanghai_bund_2k.hdr',
+  (hdr) => { hdr.mapping = THREE.EquirectangularReflectionMapping; scene.environment = hdr; }
+);
 
+// ─── Parameters for GUI ───────────────────────────────────────────
+let model;
+const params = {
+  /* anchoring offsets (pixels) */
+  offsetX : 18,
+  offsetY : -630,
+  offsetZ : 7.65,
 
+  /* transform */
+  scale   : 0.1,
+  rotX    : 0,
+  rotY    : 0,
+  rotZ    : 0,
 
-const canvas   = document.querySelector('.webgl')     
-const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true })
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
-renderer.setSize(window.innerWidth, window.innerHeight)
-renderer.outputEncoding = THREE.sRGBEncoding
-renderer.toneMapping    = THREE.ACESFilmicToneMapping      
+  /* helpers */
+  showHelpers : true,
+};
 
-const scene   = new THREE.Scene()
-const camera  = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100)
-camera.position.set(0, 0, 5)
-scene.add(camera)
-
-new RGBELoader()
-  .load(
-    'https://cdn.jsdelivr.net/gh/sabareesh-ed/sail@main/shanghai_bund_2k.hdr',
-    (hdr) => {
-      hdr.mapping     = THREE.EquirectangularReflectionMapping
-      scene.environment = hdr
-    }
-  )
-
+// ─── Load the GLB ────────────────────────────────────────────────
 new GLTFLoader().load(
-  'https://indigo-edge-assets.netlify.app/model-1.glb',
-  ({ scene: model }) => {
-    scene.add(model)
-    fitCameraTo(model)                                     // frame it once it lands
+  'https://indigo-edge-assets.netlify.app/ie-gradient-2.glb',
+  ({ scene: glb }) => {
+    model = glb;
+    scene.add(model);
+    model.scale.setScalar(params.scale);
+    initGUI();
+    updateModelTransform();
   },
-  undefined,                                               // progress handler (optional)
-  (err) => console.error('GLB load error →', err)
-)
-  
+  undefined,
+  (err) => console.error('GLB load error:', err)
+);
 
-function fitCameraTo(object, offset = 1.25) {
-  const box   = new THREE.Box3().setFromObject(object)
-  const size  = box.getSize(new THREE.Vector3()).length()
-  const center= box.getCenter(new THREE.Vector3())
+// ─── DOM → World utility ─────────────────────────────────────────
+function getWorldPositionFromDom({ offsetX = 0, offsetY = 0, offsetZ = 0 }) {
+  const rect = { left: offsetX, top: window.innerHeight };
 
-  camera.near = size / 100
-  camera.far  = size * 100
-  camera.updateProjectionMatrix()
+  const { innerWidth:w, innerHeight:h } = window;
 
-  camera.position.copy(center)
-  camera.position.z += size * offset
-  camera.lookAt(center)
+  // Centre of element + pixel nudges → Normalised Device Co-ordinates
+  const xNDC = ((rect.left + offsetX) / w) * 2 - 1;
+  const yNDC = ((rect.top  + offsetY) / h) * -2 + 1;
+
+  // Project out into the world (camera perspective)
+  const vector   = new THREE.Vector3(xNDC, yNDC, 0.5).unproject(camera);
+  const dir      = vector.clone().sub(camera.position).normalize();
+  const distance = camera.position.distanceTo(vector) + offsetZ;
+
+  return camera.position.clone().add(dir.multiplyScalar(distance));
 }
 
+// ─── Core positioning routine ────────────────────────────────────
+function updateModelTransform() {
+  if (!model) return;
 
-window.addEventListener('resize', () => {
-  camera.aspect = window.innerWidth / window.innerHeight
-  camera.updateProjectionMatrix()
-  renderer.setSize(window.innerWidth, window.innerHeight)
-})
+  const worldPos = getWorldPositionFromDom({ 
+    offsetX: params.offsetX,
+    offsetY: params.offsetY,
+    offsetZ: params.offsetZ,
+  });
 
+  model.position.copy(worldPos);
 
-function animate() {
+  // Apply user tweaks (scale, rotation)
+  model.scale.setScalar(params.scale);
+  model.rotation.set(params.rotX, params.rotY, params.rotZ);
+
+  // Helper visibility
+  axes.visible = camAid.visible = params.showHelpers;
+}
+
+// ─── dat.GUI setup ───────────────────────────────────────────────
+function initGUI() {
+  const gui = new dat.GUI({ width: 300 });
+
+  const p = gui.addFolder('Pixel Offsets');
+  p.add(params, 'offsetX', -2000,  2000, 1).name('← → X px').onChange(updateModelTransform);
+  p.add(params, 'offsetY', -2000,  2000, 1).name('↑ ↓ Y px').onChange(updateModelTransform);
+  p.open();
+
+  gui.add(params, 'offsetZ',  -10,   10, 0.01).name('Depth Z').onChange(updateModelTransform);
+  gui.add(params, 'scale',     0.1, 5, 0.01).name('Uniform Scale').onChange(updateModelTransform);
+
+  const r = gui.addFolder('Rotation (rad)');
+  r.add(params, 'rotX', -Math.PI, Math.PI, 0.01).name('X').onChange(updateModelTransform);
+  r.add(params, 'rotY', -Math.PI, Math.PI, 0.01).name('Y').onChange(updateModelTransform);
+  r.add(params, 'rotZ', -Math.PI, Math.PI, 0.01).name('Z').onChange(updateModelTransform);
+  r.open();
+
+  gui.add(params, 'showHelpers').name('Show Axes & Camera').onChange(updateModelTransform);
+
+  gui.add({ reset() {
+    Object.assign(params, {
+      offsetX:20, offsetY:-200, offsetZ:0, scale:1,
+      rotX:0, rotY:0, rotZ:0
+    });
+    updateModelTransform();
+    gui.updateDisplay();
+  } }, 'reset').name('↩︎ Reset All');
+}
+
+// ─── Responsiveness ─────────────────────────────────────────────
+function onResize() {
+  const { innerWidth:w, innerHeight:h } = window;
+  camera.aspect = w / h;
+  camera.updateProjectionMatrix();
+  renderer.setSize(w, h, false);
+  updateModelTransform();
+}
+window.addEventListener('resize',  onResize,             false);
+window.addEventListener('scroll',  updateModelTransform, false);
+
+// ─── Animation loop ─────────────────────────────────────────────
+(function animate() {
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
-}
-animate();
+})();
+
+
+
 
 
 // GSAP CODE HERE
