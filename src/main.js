@@ -1,132 +1,83 @@
-import * as THREE from "three";
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import * as dat from 'dat.gui';
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
 import "./styles/style.css";
+
+// Imports for GSAP here
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import SplitType from "split-type";
 
 
-const scene = new THREE.Scene();
-const canvas = document.querySelector(".webgl");
-const webglWrapper = document.querySelector(".webgl_wrapper");
-const camera = new THREE.PerspectiveCamera(10, webglWrapper.offsetWidth / webglWrapper.offsetHeight, 0.1, 100);
+// Three js imports here
+import * as THREE from 'three'
+import { GLTFLoader }  from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { RGBELoader }  from 'three/examples/jsm/loaders/RGBELoader.js'
 
-const renderer = new THREE.WebGLRenderer({ 
-    canvas: canvas,
-    alpha: true,
-    antialias: true
-});
-renderer.setSize(webglWrapper.offsetWidth, webglWrapper.offsetHeight);
-webglWrapper.appendChild(renderer.domElement);
 
-renderer.setClearColor(0x000000, 0);
 
-const gui = new dat.GUI();
 
-const modelPosition = {
-  x: 0,
-  y: -10.5,
-  z: 0
-};
 
-console.log("script loaded");
 
-const envStudio = "https://cdn.jsdelivr.net/gh/sabareesh-ed/sail@main/shanghai_bund_2k.hdr";
-const rgbeLoader = new RGBELoader();
-rgbeLoader.load(envStudio, function (texture) {
-  texture.mapping = THREE.EquirectangularReflectionMapping;
-  scene.environment = texture;
-});
+const canvas   = document.querySelector('.webgl')     
+const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true })
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2))
+renderer.setSize(window.innerWidth, window.innerHeight)
+renderer.outputEncoding = THREE.sRGBEncoding
+renderer.toneMapping    = THREE.ACESFilmicToneMapping      
 
-const loader = new GLTFLoader();
-let model;
+const scene   = new THREE.Scene()
+const camera  = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 100)
+camera.position.set(0, 0, 5)
+scene.add(camera)
 
-// Track loading progress
-loader.load('https://indigo-edge-assets.netlify.app/test-02.glb', 
-    (gltf) => {
-        model = gltf.scene;
-        model.traverse((child) => {
-            if (child.isMesh) {
-                child.material = new THREE.MeshPhysicalMaterial({
-                   // color: 0xadd8e6,
-                    metalness: 0.3,
-                    roughness: 0.2,
-                    opacity: 0.8,
-                    transparent: true,
-                    clearcoat: 1,
-                    clearcoatRoughness: 0.1,
-                    ior: 1.5,
-                    envMapIntensity: 1,
-                    reflectivity: 1,
-                    transmission: 1,
-                });
-            }
-        });
-
-        scene.add(model);
-        model.rotation.set(0, 0.5, 0);
-        window.model = model;
-
-        gui.add(modelPosition, 'x', -50, 50).name('Position X');
-        gui.add(modelPosition, 'y', -50, 50).name('Position Y');
-        gui.add(modelPosition, 'z', -50, 50).name('Position Z');
-
-        // Once model is loaded, hide loading screen
-        
-        setTimeout(() => {
-          document.querySelector('.loading-screen').classList.add('loaded');
-        }, 500);
-        
-    },
-
-    // onProgress callback
-    (xhr) => {
-        const percent = (xhr.loaded / xhr.total) * 100;
-        document.querySelector('.loader-text').textContent = `${Math.round(percent)}%`;
-    },
-
-    // onError callback
-    (error) => {
-        console.error("An error occurred while loading the model", error);
+new RGBELoader()
+  .load(
+    'https://cdn.jsdelivr.net/gh/sabareesh-ed/sail@main/shanghai_bund_2k.hdr',
+    (hdr) => {
+      hdr.mapping     = THREE.EquirectangularReflectionMapping
+      scene.environment = hdr
     }
-);
+  )
 
-camera.position.z = 30;
-camera.position.y = 8;
-camera.lookAt(0, 0, 0);
+new GLTFLoader().load(
+  'https://indigo-edge-assets.netlify.app/model-1.glb',
+  ({ scene: model }) => {
+    scene.add(model)
+    fitCameraTo(model)                                     // frame it once it lands
+  },
+  undefined,                                               // progress handler (optional)
+  (err) => console.error('GLB load error →', err)
+)
+  
+
+function fitCameraTo(object, offset = 1.25) {
+  const box   = new THREE.Box3().setFromObject(object)
+  const size  = box.getSize(new THREE.Vector3()).length()
+  const center= box.getCenter(new THREE.Vector3())
+
+  camera.near = size / 100
+  camera.far  = size * 100
+  camera.updateProjectionMatrix()
+
+  camera.position.copy(center)
+  camera.position.z += size * offset
+  camera.lookAt(center)
+}
+
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth / window.innerHeight
+  camera.updateProjectionMatrix()
+  renderer.setSize(window.innerWidth, window.innerHeight)
+})
+
 
 function animate() {
-    requestAnimationFrame(animate);
-
-    if (model) {
-        model.position.set(modelPosition.x, modelPosition.y, modelPosition.z);
-    }
-
-    renderer.render(scene, camera);
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
 }
-
-function updateRendererAndCamera() {
-    const width = webglWrapper.offsetWidth;
-    const height = webglWrapper.offsetHeight;
-    
-    renderer.setSize(width, height);
-    camera.aspect = width / height;
-    camera.updateProjectionMatrix();
-}
-
-// Trigger resize on window resize
-window.addEventListener('resize', updateRendererAndCamera);
-
-// Trigger resize on scroll
-window.addEventListener('scroll', updateRendererAndCamera);
-
 animate();
 
 
-// GSAP 
-
+// GSAP CODE HERE
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -182,19 +133,6 @@ if (heroTitle) {
     },
   });
 
-  gsap.to(".webgl_wrapper", {
-    width: "22vw",
-    height: "75vh",
-    duration: 1,
-    scrollTrigger: {
-      trigger: ".section_hero",
-      start: "33% bottom",
-      end: "69% bottom",
-      scrub: true,
-      markers: false,
-      toggleActions: "play none none reverse",
-    },
-  });
 
   // New GSAP Animations start here
   gsap.to(".heading-style-h1", {
@@ -349,19 +287,6 @@ if (heroTitle) {
   });
 }
 
-gsap.to(".webgl_wrapper", {
-  left: "40%",
-  duration: 1,
-  scrollTrigger: {
-    trigger: ".section_hero",
-    start: "55% bottom",
-    end: "84% bottom",
-    scrub: true,
-    markers: false,
-    toggleActions: "play none none reverse",
-  },
-});
-
 let modelRotationTween;
 
 gsap.to(window, {
@@ -450,4 +375,3 @@ if (window.innerWidth > 768) {
     },
   });
 }
-
