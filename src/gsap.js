@@ -57,6 +57,19 @@ if (heroTitle) {
     },
   });
 
+  // gsap.to(".webgl_wrapper", {
+  //   width: "22vw",
+  //   height: "75vh",
+  //   duration: 1,
+  //   scrollTrigger: {
+  //     trigger: ".section_hero",
+  //     start: "33% bottom",
+  //     end: "69% bottom",
+  //     scrub: true,
+  //     markers: false,
+  //     toggleActions: "play none none reverse",
+  //   },
+  // });
 
   // New GSAP Animations start here
   gsap.to(".heading-style-h1", {
@@ -210,6 +223,19 @@ if (heroTitle) {
     },
   });
 }
+
+// gsap.to(".webgl_wrapper", {
+//   left: "40%",
+//   duration: 1,
+//   scrollTrigger: {
+//     trigger: ".section_hero",
+//     start: "55% bottom",
+//     end: "84% bottom",
+//     scrub: true,
+//     markers: false,
+//     toggleActions: "play none none reverse",
+//   },
+// });
 
 let modelRotationTween;
 
