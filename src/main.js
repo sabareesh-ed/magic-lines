@@ -161,7 +161,7 @@ window.addEventListener('scroll', resetOnScroll)
    const heroTitle = document.getElementById("hero-title");
    const absTitle1 = document.querySelector(".abs-title1");
    const absTitle2 = document.querySelector(".abs-title2");
-   const nav = document.querySelector(".nav_component");
+   const nav = document.querySelector(".nav_fixed");
    const hero = document.querySelector(".section_hero");
    
    gsap.set(heroTitle, { opacity: 1 });
@@ -170,7 +170,7 @@ window.addEventListener('scroll', resetOnScroll)
    
    ScrollTrigger.create({
      trigger: hero,
-     start: "bottom bottom",
+     start: "top top",
      end: "+=999999",
      onUpdate: self => {
        gsap.to(nav, { yPercent: self.direction === 1 ? -100 : 0, duration: 0.5, ease: "power1.out" });
