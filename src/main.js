@@ -347,7 +347,7 @@ window.addEventListener('scroll', resetOnScroll)
     gsap.to(".webgl_wrapper", {
       width: "100vw",
       height: "50vh",
-      bottom: "5%",
+      y: "-120%",
       duration: 1,
       scrollTrigger: {
         trigger: ".section_hero",
@@ -361,7 +361,7 @@ window.addEventListener('scroll', resetOnScroll)
 
     gsap.to(".webgl_wrapper", {
       left: "20%",
-      y: "50%", 
+     // y: "-120%", 
       duration: 1,
       scrollTrigger: {
         trigger: ".section_hero",
