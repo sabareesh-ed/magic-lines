@@ -413,7 +413,7 @@ window.addEventListener('scroll', resetOnScroll)
     ScrollTrigger.create({
       trigger: ".section_hero",
       start: "84% bottom",
-      end: "bottom bottom",
+      // end: "bottom bottom",
       onEnter: () => startModelRotation(),
       onEnterBack: () => startModelRotation(),
       onLeave: () => stopModelRotation(),
