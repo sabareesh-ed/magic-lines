@@ -152,6 +152,7 @@ window.addEventListener('scroll', resetOnScroll)
 
 
 
+
 /* ------------------------------------
    GSAP
    ------------------------------------ */
@@ -473,3 +474,93 @@ window.addEventListener('scroll', resetOnScroll)
    
    window.addEventListener("load", () => ScrollTrigger.refresh());
    
+
+
+document.addEventListener("DOMContentLoaded", () => {
+  gsap.registerPlugin(ScrollTrigger);
+
+  const mindsetItems   = document.querySelectorAll(".mindset_item");
+  const controlItems   = document.querySelectorAll(".mindset_control-item");
+  const sectionMindset = document.querySelector(".section_mindset");
+  const bgAbsolute     = document.querySelector(".bg-absolute.mindset");
+
+  /* Each control contains .progress-bar */
+  const progressBars = Array.from(controlItems).map(
+    el => el.querySelector(".progress-bar")
+  );
+
+  const mindsets = [
+    { bg: "#273570", text: "white",    accent: "white"    },
+    { bg: "#03FF86", text: "black",    accent: "black"    },
+    { bg: "black",   text: "#03FF86",  accent: "#03FF86"  }
+  ];
+
+  let current = -1;   // ensures the first update always runs
+
+  /* —————————————————————————————  helpers  ————————————————————————————— */
+  function updateMindset(index) {
+    if (index === current) return;                // no redundant work
+    const { bg, text, accent } = mindsets[index];
+
+    /* 1 — Content visibility */
+    mindsetItems.forEach(item => {
+      item.style.opacity       = "0";
+      item.style.pointerEvents = "none";
+    });
+    setTimeout(() => {
+      const active = mindsetItems[index];
+      active.style.opacity       = "1";
+      active.style.pointerEvents = "auto";
+
+      sectionMindset.style.backgroundColor = bg;
+      mindsetItems.forEach(item => {
+        item.querySelector(".mindset_title")?.style.setProperty("color", text);
+        item.querySelector(".mindset_subtitle")?.style.setProperty("color", text);
+      });
+    }, 300);
+
+    /* 2 — Controls (numbers, names, opacity) */
+    controlItems.forEach((ctrl, i) => {
+      ctrl.querySelector(".mindset_control-number")?.style.setProperty("color", accent);
+      ctrl.querySelector(".mindset_control-name")?.style.setProperty("color", accent);
+      ctrl.style.opacity = i === index ? "1" : "0.3";
+    });
+
+    /* 3 — Progress bars (shared accent, widths reset) */
+    progressBars.forEach((bar, i) => {
+      bar.style.backgroundColor = accent;
+      bar.style.transition      = "none";          // prevents 100→0 flicker
+      bar.style.width           = i === index ? "0%" : "100%";
+    });
+
+    /* 4 — Overlay text */
+    if (bgAbsolute) bgAbsolute.style.color = accent;
+
+    current = index;
+  }
+
+  updateMindset(0);    // initial paint
+
+  /* ————————————————————————————  ScrollTrigger  ———————————————————————————— */
+  ScrollTrigger.create({
+    trigger: sectionMindset,
+    start:   "top top",
+    end:     "bottom bottom",
+    scrub:   true,
+    onUpdate: self => {
+      const count       = mindsets.length;               // 3
+      const rawProgress = self.progress * count;         // 0 → 3
+      const idx         = Math.min(count - 1, Math.floor(rawProgress));
+      const segProgress = rawProgress - idx;             // 0 → 1 within segment
+
+      /* Switch to the correct mindset when we cross a boundary */
+      if (idx !== current) updateMindset(idx);
+
+      /* Animate the active bar from 0 → 100 % */
+      const activeBar = progressBars[idx];
+      activeBar.style.transition = "none";               // direct control
+      activeBar.style.width      = `${(segProgress * 100).toFixed(2)}%`;
+    }
+    // markers: true       // uncomment for visual debugging
+  });
+});
