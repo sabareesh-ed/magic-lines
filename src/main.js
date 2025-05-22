@@ -452,9 +452,10 @@ window.addEventListener('scroll', resetOnScroll)
        ease: "power2.inOut",
        scrollTrigger: {
          trigger: ".cta-section",
-         start: "top 1%",
-         end: "bottom bottom",
-         scrub: false
+         start: "top center",
+         end: "center center",
+         scrub: true,
+         //markers: true
        }
      });
    
@@ -464,9 +465,10 @@ window.addEventListener('scroll', resetOnScroll)
        ease: "power2.inOut",
        scrollTrigger: {
          trigger: ".cta-section",
-         start: "top 1%",
-         end: "bottom bottom",
-         scrub: false
+         start: "top center",
+         end: "center center",
+         scrub: true,
+         //markers: true
        }
      });
    }
