@@ -315,6 +315,9 @@ window.addEventListener('scroll', resetOnScroll)
 
 
 
+
+   
+
    if (window.innerWidth > 768) {
      gsap.to(".webgl_wrapper", {
       width: "100vw",
@@ -373,6 +376,50 @@ window.addEventListener('scroll', resetOnScroll)
       },
     }); 
    }
+
+
+    let rotationTween;
+
+    function startModelRotation() {
+      if (!pivot || rotationTween) return;
+
+      rotationTween = gsap.to(params, {
+        rotY: params.rotY + Math.PI * 2, // full rotation
+        duration: 15,                     // slow rotation
+        ease: "none",
+        repeat: -1,
+        onUpdate: () => {
+          update();
+        }
+      });
+    }
+
+    function stopModelRotation() {
+      if (rotationTween) {
+        rotationTween.kill();
+        rotationTween = null;
+      }
+      // Animate rotY back to original 0.51 smoothly
+      gsap.to(params, {
+        rotY: 0.51,
+        duration: 1,
+        ease: "power2.out",
+        onUpdate: () => {
+          update();
+        }
+      });
+    }
+
+    ScrollTrigger.create({
+      trigger: ".section_hero",
+      start: "84% bottom",
+      end: "bottom bottom",
+      onEnter: () => startModelRotation(),
+      onEnterBack: () => startModelRotation(),
+      onLeave: () => stopModelRotation(),
+      onLeaveBack: () => stopModelRotation(),
+    });
+
 
     
   
