@@ -385,7 +385,7 @@ window.addEventListener('scroll', resetOnScroll)
 
       rotationTween = gsap.to(params, {
         rotY: params.rotY + Math.PI * 2, // full rotation
-        duration: 15,                     // slow rotation
+        duration: 6,                     // slow rotation
         ease: "none",
         repeat: -1,
         onUpdate: () => {
