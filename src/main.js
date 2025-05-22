@@ -474,6 +474,11 @@ window.addEventListener('scroll', resetOnScroll)
    
    window.addEventListener("load", () => ScrollTrigger.refresh());
    
+   
+   
+   
+   
+   //  MINDSET SECTION — Scroll-driven, single-accent, overlap-safe
 
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -481,13 +486,11 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const mindsetItems   = document.querySelectorAll(".mindset_item");
   const controlItems   = document.querySelectorAll(".mindset_control-item");
-  const sectionMindset = document.querySelector(".section_mindset");
-  const bgAbsolute     = document.querySelector(".bg-absolute.mindset");
-
-  /* Each control contains .progress-bar */
-  const progressBars = Array.from(controlItems).map(
+  const progressBars   = Array.from(controlItems).map(
     el => el.querySelector(".progress-bar")
   );
+  const sectionMindset = document.querySelector(".section_mindset");
+  const bgAbsolute     = document.querySelector(".bg-absolute.mindset");
 
   const mindsets = [
     { bg: "#273570", text: "white",    accent: "white"    },
@@ -495,72 +498,93 @@ document.addEventListener("DOMContentLoaded", () => {
     { bg: "black",   text: "#03FF86",  accent: "#03FF86"  }
   ];
 
-  let current = -1;   // ensures the first update always runs
+  let current     = -1;          // tracks active slide
+  let showTimeout = null;        // prevents overlapping fades
 
-  /* —————————————————————————————  helpers  ————————————————————————————— */
-  function updateMindset(index) {
-    if (index === current) return;                // no redundant work
-    const { bg, text, accent } = mindsets[index];
-
-    /* 1 — Content visibility */
+  /* ───────────────────────────────────────── helpers ───────────────────────────────────────── */
+  function hideAllMindsets() {
     mindsetItems.forEach(item => {
       item.style.opacity       = "0";
       item.style.pointerEvents = "none";
     });
-    setTimeout(() => {
+  }
+
+  function updateMindset(index) {
+    if (index === current) return;
+
+    /* cancel any pending reveal from a previous slide */
+    if (showTimeout) {
+      clearTimeout(showTimeout);
+      showTimeout = null;
+    }
+
+    const { bg, text, accent } = mindsets[index];
+
+    /* 1 — Hide everything first */
+    hideAllMindsets();
+
+    /* 2 — Reveal the active item after a short pause (smooth fade) */
+    showTimeout = setTimeout(() => {
       const active = mindsetItems[index];
       active.style.opacity       = "1";
       active.style.pointerEvents = "auto";
 
       sectionMindset.style.backgroundColor = bg;
+
       mindsetItems.forEach(item => {
         item.querySelector(".mindset_title")?.style.setProperty("color", text);
         item.querySelector(".mindset_subtitle")?.style.setProperty("color", text);
       });
-    }, 300);
+    }, 0);
 
-    /* 2 — Controls (numbers, names, opacity) */
+    /* 3 — Controls and shared accent */
     controlItems.forEach((ctrl, i) => {
       ctrl.querySelector(".mindset_control-number")?.style.setProperty("color", accent);
       ctrl.querySelector(".mindset_control-name")?.style.setProperty("color", accent);
       ctrl.style.opacity = i === index ? "1" : "0.3";
     });
 
-    /* 3 — Progress bars (shared accent, widths reset) */
+    /* 4 — Progress bars: reset active to 0 %, others stay full */
     progressBars.forEach((bar, i) => {
       bar.style.backgroundColor = accent;
-      bar.style.transition      = "none";          // prevents 100→0 flicker
+      bar.style.transition      = "none";          // kills 100→0 flicker
       bar.style.width           = i === index ? "0%" : "100%";
     });
 
-    /* 4 — Overlay text */
+    /* 5 — Overlay colour */
     if (bgAbsolute) bgAbsolute.style.color = accent;
 
     current = index;
   }
 
-  updateMindset(0);    // initial paint
+  hideAllMindsets();   // start fully hidden
 
-  /* ————————————————————————————  ScrollTrigger  ———————————————————————————— */
-  ScrollTrigger.create({
+  /* ────────────────────────── ScrollTrigger setup ────────────────────────── */
+  const st = ScrollTrigger.create({
     trigger: sectionMindset,
     start:   "top top",
     end:     "bottom bottom",
     scrub:   true,
     onUpdate: self => {
-      const count       = mindsets.length;               // 3
-      const rawProgress = self.progress * count;         // 0 → 3
-      const idx         = Math.min(count - 1, Math.floor(rawProgress));
-      const segProgress = rawProgress - idx;             // 0 → 1 within segment
+      const total   = mindsets.length;                  // 3
+      const raw     = self.progress * total;            // 0 → 3
+      const idx     = Math.min(total - 1, Math.floor(raw));
+      const segProg = raw - idx;                        // 0 → 1 in-segment
 
-      /* Switch to the correct mindset when we cross a boundary */
       if (idx !== current) updateMindset(idx);
 
-      /* Animate the active bar from 0 → 100 % */
-      const activeBar = progressBars[idx];
-      activeBar.style.transition = "none";               // direct control
-      activeBar.style.width      = `${(segProgress * 100).toFixed(2)}%`;
+      /* animate active progress bar 0→100 % through its segment */
+      const bar = progressBars[idx];
+      bar.style.transition = "none";
+      bar.style.width      = `${(segProg * 100).toFixed(2)}%`;
     }
-    // markers: true       // uncomment for visual debugging
+    // markers: true // uncomment for debugging
   });
+
+  /* Ensure the correct slide is active even on a mid-page refresh */
+  const initialIdx = Math.min(
+    mindsets.length - 1,
+    Math.floor(st.progress * mindsets.length)
+  );
+  updateMindset(initialIdx);
 });
