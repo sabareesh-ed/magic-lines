@@ -313,7 +313,10 @@ window.addEventListener('scroll', resetOnScroll)
      }
    });
 
-    gsap.to(".webgl_wrapper", {
+
+
+   if (window.innerWidth > 768) {
+     gsap.to(".webgl_wrapper", {
       width: "100vw",
       height: "80vh",
       duration: 1,
@@ -327,18 +330,48 @@ window.addEventListener('scroll', resetOnScroll)
       },
     });
 
-  gsap.to(".webgl_wrapper", {
-    left: "30%",
-    duration: 1,
-    scrollTrigger: {
-      trigger: ".section_hero",
-      start: "55% bottom",
-      end: "84% bottom",
-      scrub: true,
-      markers: false,
-      toggleActions: "play none none reverse",
-    },
-  });
+    gsap.to(".webgl_wrapper", {
+      left: "40%",
+      duration: 1,
+      scrollTrigger: {
+        trigger: ".section_hero",
+        start: "55% bottom",
+        end: "84% bottom",
+        scrub: true,
+        markers: false,
+        toggleActions: "play none none reverse",
+      },
+    });
+   } else {
+    gsap.to(".webgl_wrapper", {
+      width: "100vw",
+      height: "50vh",
+      duration: 1,
+      scrollTrigger: {
+        trigger: ".section_hero",
+        start: "33% bottom",
+        end: "69% bottom",
+        scrub: true,
+        markers: false,
+        toggleActions: "play none none reverse",
+      },
+    });
+
+    gsap.to(".webgl_wrapper", {
+      left: "10%",
+      duration: 1,
+      scrollTrigger: {
+        trigger: ".section_hero",
+        start: "55% bottom",
+        end: "84% bottom",
+        scrub: true,
+        markers: false,
+        toggleActions: "play none none reverse",
+      },
+    }); 
+   }
+
+    
   
    
  if (window.innerWidth > 767) {
@@ -386,6 +419,7 @@ window.addEventListener('scroll', resetOnScroll)
        }
      });
    }
+
    
    window.addEventListener("load", () => ScrollTrigger.refresh());
    
