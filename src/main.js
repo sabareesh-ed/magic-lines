@@ -1,164 +1,150 @@
-import "./styles/style.css";
+import './styles/style.css'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+import SplitType from 'split-type'
 
-// Imports for GSAP here
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
-import SplitType from "split-type";
+import * as THREE from 'three'
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js'
+import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js'
+import dat from 'dat.gui'
 
-// ─── 3 JS Imports ──────────────────────────────────────────────────────
-import * as THREE from 'three';
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
-import { RGBELoader } from 'three/examples/jsm/loaders/RGBELoader.js';
-import dat from 'dat.gui';
+gsap.registerPlugin(ScrollTrigger)
 
-// ─── Renderer / Scene / Camera ────────────────────────────────────
-const canvas   = document.querySelector('.webgl');
-const renderer = new THREE.WebGLRenderer({ canvas, alpha:true, antialias:true });
-renderer.outputEncoding = THREE.sRGBEncoding;
-renderer.toneMapping    = THREE.ACESFilmicToneMapping;
-renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-renderer.setSize(window.innerWidth, window.innerHeight, false);
+const canvas = document.querySelector('.webgl')
 
-const scene   = new THREE.Scene();
-const camera  = new THREE.PerspectiveCamera(25, window.innerWidth / window.innerHeight, 0.1, 100);
-camera.position.set(0, 0, 5);
-scene.add(camera);
+const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true })
+renderer.outputEncoding = THREE.sRGBEncoding
+renderer.toneMapping = THREE.ACESFilmicToneMapping
 
-const axes   = new THREE.AxesHelper(10);
-const camAid = new THREE.CameraHelper(camera);
-scene.add(axes, camAid);
+const scene = new THREE.Scene()
 
-// ─── Optional HDRI ────────────────────────────────────────────────
+const camera = new THREE.PerspectiveCamera(
+  30,
+  canvas.clientWidth / canvas.clientHeight,
+  0.1,
+  100
+)
+camera.position.set(-0.5, 0, 5)
+scene.add(camera)
+
+function resize () {
+  const { clientWidth: w, clientHeight: h } = canvas.parentElement
+  renderer.setSize(w, h, false)
+  camera.aspect = w / h
+  camera.updateProjectionMatrix()
+}
+resize()
+window.addEventListener('resize', resize)
+// window.addEventListener('scroll', resize)
+
+// ─── Environment ───────────────────────────────────────────────────────
 new RGBELoader().load(
   'https://cdn.jsdelivr.net/gh/sabareesh-ed/sail@main/shanghai_bund_2k.hdr',
-  // 'https://cdn.jsdelivr.net/gh/armouredmaoG/Recreation-Assets@main/studio_small_09_1k_low.hdr',
-  (hdr) => { hdr.mapping = THREE.EquirectangularReflectionMapping; scene.environment = hdr; }
-);
+  hdr => {
+    hdr.mapping = THREE.EquirectangularReflectionMapping
+    scene.environment = hdr
+  }
+)
 
-// ─── Parameters for GUI ───────────────────────────────────────────
-let model;
+// ─── Parameters & GUI ──────────────────────────────────────────────────
 const params = {
-  /* anchoring offsets (pixels) */
-  offsetX : 23,
-  offsetY : -645,
-  offsetZ : 7.65,
+  scale: 0.35,
+  rotX: 0.23,
+  rotY: 0.51,
+  rotZ: 0,
+  pivotX: 0,
+  pivotY: 0,
+  pivotZ: 0
+}
 
-  /* transform */
-  scale   : 0.07,
-  rotX    : 0,
-  rotY    : 1.24,
-  rotZ    : 0,
+let pivot, model, axes
 
-  /* helpers */
-  showHelpers : true,
-};
+function update () {
+  if (!pivot || !model) return
 
-// ─── Load the GLB ────────────────────────────────────────────────
+  pivot.rotation.set(params.rotX, params.rotY, params.rotZ)
+  pivot.scale.setScalar(params.scale)
+
+  pivot.position.set(params.pivotX, params.pivotY, params.pivotZ)
+
+  model.position.set(-params.pivotX, -params.pivotY, -params.pivotZ)
+
+  if (axes) axes.position.set(0, 0, 0)
+}
+
+function initGUI () {
+  const gui = new dat.GUI({ width: 300 })
+
+  gui.add(params, 'scale', 0.1, 5, 0.01).name('Uniform Scale').onChange(update)
+
+  const r = gui.addFolder('Rotation')
+  r.add(params, 'rotX', -Math.PI, Math.PI, 0.01).name('X').onChange(update)
+  r.add(params, 'rotY', -Math.PI, Math.PI, 0.01).name('Y').onChange(update)
+  r.add(params, 'rotZ', -Math.PI, Math.PI, 0.01).name('Z').onChange(update)
+  r.open()
+
+  const p = gui.addFolder('Pivot Position')
+  p.add(params, 'pivotX', -5, 5, 0.01).name('X').onChange(update)
+  p.add(params, 'pivotY', -5, 5, 0.01).name('Y').onChange(update)
+  p.add(params, 'pivotZ', -5, 5, 0.01).name('Z').onChange(update)
+  p.open()
+
+  gui.add(
+    {
+      reset () {
+        Object.assign(params, {
+          scale: 1,
+          rotX: 0,
+          rotY: 0,
+          rotZ: 0,
+          pivotX: 0,
+          pivotY: -1,
+          pivotZ: 0
+        })
+        update()
+        gui.updateDisplay()
+      }
+    },
+    'reset'
+  ).name('↩︎ Reset All')
+}
+
+// ─── Model ─────────────────────────────────────────────────────────────
 new GLTFLoader().load(
   'https://indigo-edge-assets.netlify.app/ie-gradient-2.glb',
   ({ scene: glb }) => {
-    model = glb;
-    scene.add(model);
-    model.scale.setScalar(params.scale);
-    initGUI();
-    updateModelTransform();
+    pivot = new THREE.Group()
+    scene.add(pivot)
+
+    const bbox = new THREE.Box3().setFromObject(glb)
+    glb.position.copy(bbox.min.clone().negate())
+
+    model = glb
+    pivot.add(model)
+
+    // axes = new THREE.AxesHelper(5)
+    // pivot.add(axes)
+
+    update()
+    initGUI()
   },
   undefined,
-  (err) => console.error('GLB load error:', err)
-);
+  err => console.error(err)
+)
 
-// ─── DOM → World utility ─────────────────────────────────────────
-function getWorldPositionFromDom({ offsetX = 0, offsetY = 0, offsetZ = 0 }) {
-  const rect = { left: offsetX, top: window.innerHeight };
-
-  const { innerWidth:w, innerHeight:h } = window;
-
-  // Centre of element + pixel nudges → Normalised Device Co-ordinates
-  const xNDC = ((rect.left + offsetX) / w) * 2 - 1;
-  const yNDC = ((rect.top  + offsetY) / h) * -2 + 1;
-
-  // Project out into the world (camera perspective)
-  const vector   = new THREE.Vector3(xNDC, yNDC, 0.5).unproject(camera);
-  const dir      = vector.clone().sub(camera.position).normalize();
-  const distance = camera.position.distanceTo(vector) + offsetZ;
-
-  return camera.position.clone().add(dir.multiplyScalar(distance));
+// ─── Render Loop ───────────────────────────────────────────────────────
+function animate () {
+  renderer.render(scene, camera)
+  requestAnimationFrame(animate)
 }
+animate()
 
-// ─── Core positioning routine ────────────────────────────────────
-function updateModelTransform() {
-  if (!model) return;
-
-  const worldPos = getWorldPositionFromDom({ 
-    offsetX: params.offsetX,
-    offsetY: params.offsetY,
-    offsetZ: params.offsetZ,
-  });
-
-  model.position.copy(worldPos);
-
-  // Apply user tweaks (scale, rotation)
-  model.scale.setScalar(params.scale);
-  model.rotation.set(params.rotX, params.rotY, params.rotZ);
-
-  // Helper visibility
-  axes.visible = camAid.visible = params.showHelpers;
+function resetOnScroll () {
+  resize()
+  update()
+  // gui.updateDisplay()
 }
-
-// ─── dat.GUI setup ───────────────────────────────────────────────
-function initGUI() {
-  const gui = new dat.GUI({ width: 300 });
-
-  const p = gui.addFolder('Pixel Offsets');
-  p.add(params, 'offsetX', -2000,  2000, 1).name('← → X px').onChange(updateModelTransform);
-  p.add(params, 'offsetY', -2000,  2000, 1).name('↑ ↓ Y px').onChange(updateModelTransform);
-  p.open();
-
-  gui.add(params, 'offsetZ',  -10,   10, 0.01).name('Depth Z').onChange(updateModelTransform);
-  gui.add(params, 'scale',     0.1, 5, 0.01).name('Uniform Scale').onChange(updateModelTransform);
-
-  const r = gui.addFolder('Rotation (rad)');
-  r.add(params, 'rotX', -Math.PI, Math.PI, 0.01).name('X').onChange(updateModelTransform);
-  r.add(params, 'rotY', -Math.PI, Math.PI, 0.01).name('Y').onChange(updateModelTransform);
-  r.add(params, 'rotZ', -Math.PI, Math.PI, 0.01).name('Z').onChange(updateModelTransform);
-  r.open();
-
-  gui.add(params, 'showHelpers').name('Show Axes & Camera').onChange(updateModelTransform);
-
-  gui.add({ reset() {
-    Object.assign(params, {
-      offsetX:20, offsetY:-200, offsetZ:0, scale:1,
-      rotX:0, rotY:0, rotZ:0
-    });
-    updateModelTransform();
-    gui.updateDisplay();
-  } }, 'reset').name('↩︎ Reset All');
-}
-
-// ─── Responsiveness ─────────────────────────────────────────────
-function onResize() {
-  const { innerWidth:w, innerHeight:h } = window;
-  camera.aspect = w / h;
-  camera.updateProjectionMatrix();
-  renderer.setSize(w, h, false);
-  updateModelTransform();
-}
-window.addEventListener('resize',  onResize,             false);
-window.addEventListener('scroll',  updateModelTransform, false);
-
-// ─── Animation loop ─────────────────────────────────────────────
-(function animate() {
-  renderer.render(scene, camera);
-  requestAnimationFrame(animate);
-})();
-
-
-
-
-
-
-
-
+window.addEventListener('scroll', resetOnScroll)
 
 
 
@@ -265,61 +251,6 @@ window.addEventListener('scroll',  updateModelTransform, false);
    });
 
    
-
-   let spinTween;
-
-   gsap.to(params, {
-     offsetX: 37,
-     offsetY: -741,
-     offsetZ: 3.12,
-     ease: "none",
-     scrollTrigger: {
-       trigger: ".section_hero",
-       start: "33% bottom",
-       end: "66% bottom",
-       scrub: true,
-       toggleActions: "play none none reverse",
-       onLeave: () => {
-         // Scroll finished – animate offsetX to 184
-         gsap.to(params, {
-           offsetX: 184,
-           duration: 1,
-           ease: "power2.out",
-           onUpdate: updateModelTransform
-         });
-   
-         // Start infinite spin on Y
-         spinTween = gsap.to(params, {
-           rotY: "+=" + Math.PI * 2,
-           duration: 3,
-           ease: "linear",
-           repeat: -1,
-           onUpdate: updateModelTransform
-         });
-       },
-       onEnterBack: () => {
-         // Scroll reversed – stop spin and reset values with animation
-         if (spinTween) {
-           spinTween.kill();
-           spinTween = null;
-         }
-   
-         gsap.to(params, {
-           offsetX: 37,
-           rotY: 1.24,
-           duration: 1,
-           ease: "power2.out",
-           onUpdate: updateModelTransform
-         });
-       }
-     },
-     onUpdate: updateModelTransform
-   });
-   
-
-   
-  
-   
    const tl = gsap.timeline({
      scrollTrigger: {
        trigger: ".section_hero",
@@ -381,36 +312,34 @@ window.addEventListener('scroll',  updateModelTransform, false);
        }
      }
    });
-   
-   let modelRotationTween;
-   
-   gsap.to(window, {
-     scrollTrigger: {
-       trigger: ".section_hero",
-       start: "74% bottom",
-       end: "100% bottom",
-       scrub: true,
-       toggleActions: "play none none reverse",
-       onEnter: () => {
-         if (window.model) {
-           modelRotationTween = gsap.to(window.model.rotation, {
-             y: "+=0.6",
-             duration: 2.5,
-             repeat: -1,
-             yoyo: true,
-             ease: "power2.inOut"
-           });
-         }
-       },
-       onLeaveBack: () => {
-         if (window.model && modelRotationTween) {
-           modelRotationTween.kill();
-           modelRotationTween = null;
-           gsap.to(window.model.rotation, { y: 0.3, duration: 1, ease: "power2.out" });
-         }
-       }
-     }
-   });
+
+    gsap.to(".webgl_wrapper", {
+      width: "100vw",
+      height: "80vh",
+      duration: 1,
+      scrollTrigger: {
+        trigger: ".section_hero",
+        start: "33% bottom",
+        end: "69% bottom",
+        scrub: true,
+        markers: false,
+        toggleActions: "play none none reverse",
+      },
+    });
+
+  gsap.to(".webgl_wrapper", {
+    left: "30%",
+    duration: 1,
+    scrollTrigger: {
+      trigger: ".section_hero",
+      start: "55% bottom",
+      end: "84% bottom",
+      scrub: true,
+      markers: false,
+      toggleActions: "play none none reverse",
+    },
+  });
+  
    
    const computeShift = () => {
      const members = document.querySelector(".team-wrap_members")?.offsetWidth || 0;
