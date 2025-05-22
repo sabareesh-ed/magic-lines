@@ -361,7 +361,7 @@ window.addEventListener('scroll', resetOnScroll)
 
     gsap.to(".webgl_wrapper", {
       left: "20%",
-      bottom: "50%",
+      bottom: "50%", 
       duration: 1,
       scrollTrigger: {
         trigger: ".section_hero",
