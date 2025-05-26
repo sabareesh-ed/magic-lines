@@ -39,11 +39,10 @@ function resize() {
 }
 resize();
 window.addEventListener("resize", resize);
-// window.addEventListener('scroll', resize)
 
 // ─── Environment ───────────────────────────────────────────────────────
 new RGBELoader().load(
-  "https://cdn.jsdelivr.net/gh/sabareesh-ed/sail@main/shanghai_bund_2k.hdr",
+  "https://cdn.jsdelivr.net/gh/sabareesh-ed/sail@main/studio_small_06_1k.hdr",
   (hdr) => {
     hdr.mapping = THREE.EquirectangularReflectionMapping;
     scene.environment = hdr;
@@ -75,6 +74,31 @@ function update() {
 
   if (axes) axes.position.set(0, 0, 0);
 }
+
+// Function to set model color, opacity, and metalness dynamically
+function setModelColorOpacityMetalness(colorHex, opacity, metalness) {
+  if (!model) return;
+  model.traverse((child) => {
+    if (child.isMesh && child.material) {
+      const materials = Array.isArray(child.material) ? child.material : [child.material];
+      materials.forEach((mat) => {
+        if (mat.color) mat.color.set(colorHex);
+
+        mat.transparent = opacity < 1 ? true : false;
+        mat.opacity = opacity;
+
+        if ('metalness' in mat) {
+          mat.metalness = metalness;
+        }
+
+        mat.needsUpdate = true;
+      });
+    }
+  });
+}
+
+
+
 
 function initGUI() {
   const gui = new dat.GUI({ width: 300 });
@@ -128,8 +152,8 @@ new GLTFLoader().load(
     model = glb;
     pivot.add(model);
 
-    // axes = new THREE.AxesHelper(5)
-    // pivot.add(axes)
+    // Set initial color, opacity, metalness
+    setModelColorOpacityMetalness(0xffffff, 0.3, 0.7);
 
     update();
     initGUI();
@@ -137,6 +161,7 @@ new GLTFLoader().load(
   undefined,
   (err) => console.error(err)
 );
+
 
 // ─── Render Loop ───────────────────────────────────────────────────────
 function animate() {
@@ -152,6 +177,10 @@ function resetOnScroll() {
 }
 window.addEventListener("scroll", resetOnScroll);
 
+
+
+
+
 /* ------------------------------------
    GSAP
    ------------------------------------ */
@@ -164,8 +193,8 @@ const absTitle2 = document.querySelector(".abs-title2");
 const nav = document.querySelector(".nav_fixed");
 const hero = document.querySelector(".section_hero");
 
-gsap.set(heroTitle, { opacity: 1 });
-gsap.set(absTitle1, { opacity: 0 });
+gsap.set(heroTitle, { opacity: 1, y: 0 });
+gsap.set(absTitle1, { opacity: 0, y: 20 }); // start 20px below, hidden
 gsap.set(absTitle2, { opacity: 0 });
 
 ScrollTrigger.create({
@@ -207,7 +236,7 @@ if (splitHeroTitle) {
     stagger: 0.05,
     scrollTrigger: {
       trigger: ".section_hero",
-      start: "top-=10% top",
+      start: "top-=10.5% top",
       end: "33% bottom",
       scrub: true,
       toggleActions: "play none none reverse",
@@ -225,7 +254,7 @@ if (splitHeroTitle) {
 
 [".section_hero", ".section_hero .abs-lines"].forEach((sel, i) => {
   gsap.to(sel, {
-    ...(i === 0 ? { backgroundColor: "#273570" } : { borderColor: "white" }),
+    ...(i === 0 ? { backgroundColor: "#0D1434" } : { borderColor: "#919191" }),
     duration: 0.5,
     ease: "power2.out",
     scrollTrigger: {
@@ -261,18 +290,39 @@ gsap.to(".hero-img", {
   },
 });
 
-const tl = gsap.timeline({
-  scrollTrigger: {
-    trigger: ".section_hero",
-    start: "33% bottom",
-    end: "66% top",
-    scrub: false,
-    toggleActions: "play none none reverse",
+// ----------- Sequential fade + slide transitions -----------
+
+// 1. heroTitle fades up and out (33% → 38%)
+ScrollTrigger.create({
+  trigger: ".section_hero",
+  start: "33% bottom",
+  end: "38% bottom",
+  scrub: true,
+  onUpdate: (self) => {
+    const p = self.progress;
+    gsap.set(heroTitle, {
+      y: gsap.utils.interpolate(0, -20, p),
+      opacity: 1 - p,
+    });
   },
-  defaults: { duration: 0.2 },
 });
 
-tl.to(heroTitle, { opacity: 0 }).to(absTitle1, { opacity: 1 }, 0);
+// 2. absTitle1 fades in and moves up (38% → 43%)
+ScrollTrigger.create({
+  trigger: ".section_hero",
+  start: "38% bottom",
+  end: "43% bottom",
+  scrub: true,
+  onUpdate: (self) => {
+    const p = self.progress;
+    gsap.set(absTitle1, {
+      y: gsap.utils.interpolate(20, 0, p),
+      opacity: p,
+    });
+  },
+});
+
+// ----------- absTitle1 chars stagger fade starts after (43% → 66%) -----------
 
 const splitAbsTitle1 = new SplitType(absTitle1, { types: "chars" });
 gsap.to(splitAbsTitle1.chars, {
@@ -280,7 +330,7 @@ gsap.to(splitAbsTitle1.chars, {
   stagger: 0.05,
   scrollTrigger: {
     trigger: ".section_hero",
-    start: "33% bottom",
+    start: "43% bottom",
     end: "66% bottom",
     scrub: true,
     toggleActions: "play reverse play reverse",
@@ -292,6 +342,8 @@ gsap.to(splitAbsTitle1.chars, {
     },
   },
 });
+
+// ----------- Transition from absTitle1 to absTitle2 remains unchanged -----------
 
 const tl2 = gsap.timeline({
   scrollTrigger: {
@@ -325,64 +377,107 @@ gsap.to(splitAbsTitle2.chars, {
   },
 });
 
-if (window.innerWidth > 768) {
-  gsap.to(".webgl_wrapper", {
-    width: "100vw",
-    height: "80vh",
-    duration: 1,
-    scrollTrigger: {
-      trigger: ".section_hero",
-      start: "33% bottom",
-      end: "69% bottom",
-      scrub: true,
-      markers: false,
-      toggleActions: "play none none reverse",
-    },
-  });
 
-  gsap.to(".webgl_wrapper", {
-    left: "40%",
-    duration: 1,
-    scrollTrigger: {
-      trigger: ".section_hero",
-      start: "55% bottom",
-      end: "84% bottom",
-      scrub: true,
-      markers: false,
-      toggleActions: "play none none reverse",
-    },
-  });
-} else {
-  // mobile
-  gsap.to(".webgl_wrapper", {
-    width: "100vw",
-    height: "50vh",
-    y: "-120%",
-    duration: 1,
-    scrollTrigger: {
-      trigger: ".section_hero",
-      start: "33% bottom",
-      end: "69% bottom",
-      scrub: true,
-      markers: false,
-      toggleActions: "play none none reverse",
-    },
-  });
 
-  gsap.to(".webgl_wrapper", {
-    left: "20%",
-    // y: "-120%",
-    duration: 1,
-    scrollTrigger: {
-      trigger: ".section_hero",
-      start: "55% bottom",
-      end: "84% bottom",
-      scrub: true,
-      markers: false,
-      toggleActions: "play none none reverse",
+
+
+
+
+
+
+
+
+const isDesktop = window.innerWidth > 768;
+
+const config = {
+  width: "100vw",
+  height: isDesktop ? "95vh" : "50vh",
+  y: isDesktop ? "-100%" : "-120%",
+  left: isDesktop ? "40%" : "20%",
+};
+
+gsap.to(".webgl_wrapper", {
+  width: config.width,
+  height: config.height,
+  y: config.y,
+  duration: 1,
+  scrollTrigger: {
+    trigger: ".section_hero",
+    start: "33% bottom",
+    end: "69% bottom",
+    scrub: true,
+    markers: false,
+    toggleActions: "play none none reverse",
+  },
+});
+
+gsap.to(".webgl_wrapper", {
+  left: config.left,
+  duration: 1,
+  scrollTrigger: {
+    trigger: ".section_hero",
+    start: "55% bottom",
+    end: "84% bottom",
+    scrub: true,
+    markers: false,
+    toggleActions: "play none none reverse",
+  },
+});
+
+
+
+
+
+const colorObject = { r: 0xff / 255, g: 0xff / 255, b: 0xff / 255 };
+const opacityObject = { value: 0.3 };
+const metalnessObject = { value: 0.7 };
+
+gsap.to(colorObject, {
+  r: 0x03 / 255,
+  g: 0xff / 255,
+  b: 0x86 / 255,
+  duration: 1,
+  scrollTrigger: {
+    trigger: ".section_hero",
+    start: "65% bottom",
+    end: "84% bottom",
+    scrub: true,
+    markers: false,
+    toggleActions: "play none none reverse",
+    onUpdate: () => {
+      const hex = new THREE.Color(colorObject.r, colorObject.g, colorObject.b);
+      setModelColorOpacityMetalness(hex.getHex(), opacityObject.value, metalnessObject.value);
     },
-  });
-}
+  },
+});
+
+gsap.to(opacityObject, {
+  value: 0.5,
+  duration: 1,
+  scrollTrigger: {
+    trigger: ".section_hero",
+    start: "65% bottom",
+    end: "84% bottom",
+    scrub: true,
+  },
+});
+
+gsap.to(metalnessObject, {
+  value: 0.7,
+  duration: 1,
+  scrollTrigger: {
+    trigger: ".section_hero",
+    start: "65% bottom",
+    end: "84% bottom",
+    scrub: true,
+  },
+});
+
+
+
+
+
+
 
 let rotationTween;
 
@@ -392,7 +487,7 @@ function startModelRotation() {
   rotationTween = gsap.to(params, {
     rotY: params.rotY + Math.PI * 2, // full rotation
     duration: 6, // slow rotation
-    ease: "power2.inout",
+    ease: "linear",
     repeat: -1,
     onUpdate: () => {
       update();
@@ -477,6 +572,15 @@ if (window.innerWidth > 768) {
 }
 
 window.addEventListener("load", () => ScrollTrigger.refresh());
+
+
+
+
+
+
+
+
+
 
 //  MINDSET SECTION — Scroll-driven, single-accent, overlap-safe
 
