@@ -2,7 +2,7 @@
   "name": "webflow-javascript-template",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && cp _headers dist/_headers",
     "preview": "vite preview",
     "clean": "rimraf -rf dist",
     "lint:fix": "eslint ./src --ext .js,.jsx --fix"
