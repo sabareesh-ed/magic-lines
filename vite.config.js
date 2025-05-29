@@ -17,11 +17,11 @@ export default defineConfig({
     rollupOptions: {
       input: {
         main: './src/main.js',
-        aboutUs: './src/about-us.js',  // add your other entry point here
+        aboutUs: './src/about-us.js',
       },
       output: {
-        format: 'umd',
-        entryFileNames: '[name].js', // use [name] placeholder to keep file names
+        format: 'es',              // use ES module format for code splitting
+        entryFileNames: '[name].js',
         esModule: false,
         compact: true,
         globals: {
@@ -31,4 +31,4 @@ export default defineConfig({
       external: ['jquery'],
     },
   },
-})
+});
