@@ -181,9 +181,9 @@ window.addEventListener("scroll", resetOnScroll);
 
 
 
-/* ------------------------------------
-   GSAP
-   ------------------------------------ */
+
+
+// GSAP
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -376,14 +376,6 @@ gsap.to(splitAbsTitle2.chars, {
     },
   },
 });
-
-
-
-
-
-
-
-
 
 
 
@@ -615,7 +607,6 @@ document.addEventListener("DOMContentLoaded", () => {
   function updateMindset(index) {
     if (index === current) return;
 
-    /* cancel any pending reveal from a previous slide */
     if (showTimeout) {
       clearTimeout(showTimeout);
       showTimeout = null;
