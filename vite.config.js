@@ -1,7 +1,3 @@
-import { defineConfig } from 'vite'
-import glsl from 'vite-plugin-glsl';
-
-// vite.config.js
 export default defineConfig({
   plugins: [glsl()],
   server: {
@@ -16,10 +12,13 @@ export default defineConfig({
     minify: true,
     manifest: true,
     rollupOptions: {
-      input: './src/main.js',
+      input: {
+        main: './src/main.js',
+        aboutUs: './src/about-us.js',  // add your other entry point here
+      },
       output: {
         format: 'umd',
-        entryFileNames: 'main.js',
+        entryFileNames: '[name].js', // use [name] placeholder to keep file names
         esModule: false,
         compact: true,
         globals: {
