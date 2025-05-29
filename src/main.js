@@ -180,9 +180,6 @@ window.addEventListener("scroll", resetOnScroll);
 
 
 
-
-
-
 // GSAP
 
 gsap.registerPlugin(ScrollTrigger);
@@ -606,7 +603,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function updateMindset(index) {
     if (index === current) return;
-
     if (showTimeout) {
       clearTimeout(showTimeout);
       showTimeout = null;
