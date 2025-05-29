@@ -233,7 +233,7 @@ if (splitHeroTitle) {
     stagger: 0.05,
     scrollTrigger: {
       trigger: ".section_hero",
-      start: "top-=10.5% top",
+      start: "top-=5.2% top",
       end: "33% bottom",
       scrub: true,
       toggleActions: "play none none reverse",
@@ -328,7 +328,7 @@ gsap.to(splitAbsTitle1.chars, {
   scrollTrigger: {
     trigger: ".section_hero",
     start: "43% bottom",
-    end: "66% bottom",
+    end: "80% bottom",
     scrub: true,
     toggleActions: "play reverse play reverse",
     onUpdate: (self) => {
@@ -340,12 +340,11 @@ gsap.to(splitAbsTitle1.chars, {
   },
 });
 
-// ----------- Transition from absTitle1 to absTitle2 remains unchanged -----------
 
 const tl2 = gsap.timeline({
   scrollTrigger: {
     trigger: ".section_hero",
-    start: "66% bottom",
+    start: "80% bottom",
     end: "100% top",
     scrub: false,
     toggleActions: "play none none reverse",
@@ -362,7 +361,7 @@ gsap.to(splitAbsTitle2.chars, {
   scrollTrigger: {
     trigger: ".section_hero",
     start: "80% bottom",
-    end: "99% bottom",
+    end: "100% bottom",
     scrub: true,
     toggleActions: "play reverse play reverse",
     onUpdate: (self) => {
