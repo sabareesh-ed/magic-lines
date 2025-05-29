@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig } from 'vite';
 import glsl from 'vite-plugin-glsl';
 
 export default defineConfig({
@@ -15,11 +15,16 @@ export default defineConfig({
     minify: true,
     manifest: true,
     rollupOptions: {
-      input: './src/aboutUs.js',
+      // Multiple entry points
+      input: {
+        main: './src/main.js',
+        aboutUs: './src/aboutUs.js',
+      },
+      // Avoid specifying 'umd' format for multiple inputs; let Vite handle the output format
+      // If you want to specify output options, do it like this:
       output: {
-        format: 'umd',
-        entryFileNames: 'aboutUs.js',
-        esModule: false,
+        entryFileNames: '[name].js', // output filenames will be main.js, aboutUs.js, etc.
+        // esModule: false, // usually not needed unless you want to disable ES module output
         compact: true,
         globals: {
           jquery: '$',
@@ -28,4 +33,4 @@ export default defineConfig({
       external: ['jquery'],
     },
   },
-})
+});
