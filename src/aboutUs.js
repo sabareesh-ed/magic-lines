@@ -3,7 +3,6 @@ import "./styles/style.css";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
-import dat from "dat.gui";
 import gsap from "gsap";
 
 const canvas = document.querySelector(".webgl");
@@ -54,7 +53,7 @@ const params = {
   pivotZ: 0,
 };
 
-let pivot, model, axes, rotationTween;
+let pivot, model;
 
 function update() {
   if (!pivot || !model) return;
@@ -65,18 +64,16 @@ function update() {
   pivot.position.set(params.pivotX, params.pivotY, params.pivotZ);
 
   model.position.set(-params.pivotX, -params.pivotY, -params.pivotZ);
-
-  if (axes) axes.position.set(0, 0, 0);
 }
 
 let rotationStarted = false;
 
 function startModelRotation() {
-  if (!pivot || rotationTween || rotationStarted) return; 
+  if (!pivot || rotationStarted) return;
 
-  rotationStarted = true; 
+  rotationStarted = true;
 
-  rotationTween = gsap.to(params, {
+  gsap.to(params, {
     rotY: params.rotY + Math.PI * 2,
     duration: 6,
     ease: "linear",
@@ -87,6 +84,23 @@ function startModelRotation() {
   });
 }
 
+// Loader functionality
+let modelsLoaded = 0;
+const totalModels = 1; // One model in this case
+const loaderText = document.querySelector(".loader-text");
+
+function updateLoaderProgress() {
+  const progress = Math.floor((modelsLoaded / totalModels) * 100);
+  loaderText.textContent = `${progress}%`;
+
+  // If the model is loaded, hide the loader
+  if (modelsLoaded === totalModels) {
+    const loadingScreen = document.querySelector(".loading-screen");
+    loadingScreen.classList.add("loaded");
+  }
+}
+
+// Function to start rotation on scroll
 function checkScroll() {
   const scrollPosition = window.scrollY || document.documentElement.scrollTop;
   const viewportHeight = window.innerHeight;
@@ -98,46 +112,7 @@ function checkScroll() {
 
 window.addEventListener("scroll", checkScroll);
 
-
-function initGUI() {
-  const gui = new dat.GUI({ width: 300 });
-
-  gui.add(params, "scale", 0.1, 5, 0.01).name("Uniform Scale").onChange(update);
-
-  const r = gui.addFolder("Rotation");
-  r.add(params, "rotX", -Math.PI, Math.PI, 0.01).name("X").onChange(update);
-  r.add(params, "rotY", -Math.PI, Math.PI, 0.01).name("Y").onChange(update);
-  r.add(params, "rotZ", -Math.PI, Math.PI, 0.01).name("Z").onChange(update);
-  r.open();
-
-  const p = gui.addFolder("Pivot Position");
-  p.add(params, "pivotX", -5, 5, 0.01).name("X").onChange(update);
-  p.add(params, "pivotY", -5, 5, 0.01).name("Y").onChange(update);
-  p.add(params, "pivotZ", -5, 5, 0.01).name("Z").onChange(update);
-  p.open();
-
-  gui
-    .add(
-      {
-        reset() {
-          Object.assign(params, {
-            scale: 1,
-            rotX: 0,
-            rotY: 0,
-            rotZ: 0,
-            pivotX: 0,
-            pivotY: -1,
-            pivotZ: 0,
-          });
-          update();
-          gui.updateDisplay();
-        },
-      },
-      "reset"
-    )
-    .name("↩︎ Reset All");
-}
-
+// Load the model
 new GLTFLoader().load(
   "https://indigo-edge-assets.netlify.app/ie-gradient-2.glb",
   ({ scene: glb }) => {
@@ -151,10 +126,19 @@ new GLTFLoader().load(
     pivot.add(model);
 
     update();
-    initGUI();
+    modelsLoaded++; // Increment models loaded
+    updateLoaderProgress(); // Update the progress
+
+    // Initialize the rotation and update
+    startModelRotation();
   },
-  undefined,
-  (err) => console.error(err)
+  (xhr) => {
+    const progress = (xhr.loaded / xhr.total) * 100;
+    loaderText.textContent = `Loading: ${Math.floor(progress)}%`;
+  },
+  (err) => {
+    console.error(err);
+  }
 );
 
 function animate() {
@@ -163,4 +147,10 @@ function animate() {
 }
 animate();
 
+// Add event listener for resizing and scroll reset
 window.addEventListener("scroll", resetOnScroll);
+
+// Reset on scroll function
+function resetOnScroll() {
+  resize();
+}
