@@ -177,7 +177,7 @@ function loadModelWithProgress(url) {
 }
 
 loadModelWithProgress(
-  "https://indigo-edge-assets.netlify.app/ie-gradient-2.glb"
+  "https://indigo-edge-assets.netlify.app/new-ie_grdient.glb"
 );
 
 function animate() {

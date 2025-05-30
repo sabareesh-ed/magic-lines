@@ -140,7 +140,12 @@ function initGUI() {
 }
 
 // ─── Model ─────────────────────────────────────────────────────────────
-new GLTFLoader().load(
+const loader = new GLTFLoader();
+const loadingScreen = document.querySelector(".loading-screen .loader-text");
+
+let progress = 0;
+
+loader.load(
   "https://indigo-edge-assets.netlify.app/ie-transparent-2.glb",
   ({ scene: glb }) => {
     pivot = new THREE.Group();
@@ -155,12 +160,26 @@ new GLTFLoader().load(
     // Set initial color, opacity, metalness
     setModelColorOpacityMetalness(0xffffff, 0.3, 0.7);
 
+    // Update progress to 100% and add 'loaded' class
+    setTimeout(() => {
+      loadingScreen.innerText = '100%';
+      document.querySelector('.loading-screen').classList.add('loaded');
+    }, 200);
+
     update();
     initGUI();
+  },
+  (xhr) => {
+    // Calculate loading progress
+    progress = (xhr.loaded / xhr.total) * 100;
+
+    // Update loader text
+    loadingScreen.innerText = Math.floor(progress) + '%';
   },
   undefined,
   (err) => console.error(err)
 );
+
 
 
 // ─── Render Loop ───────────────────────────────────────────────────────
