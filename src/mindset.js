@@ -143,7 +143,7 @@ scene1.add(pointLight);
 function animate() {
   scene1.traverse((child) => {
     if (child.isMesh) {
-      child.rotation.y -= 0.005; 
+      child.rotation.y += 0.005; 
     }
   });
 
