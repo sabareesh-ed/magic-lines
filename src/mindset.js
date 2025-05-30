@@ -52,6 +52,9 @@ new RGBELoader().load(
 // ─── Load Models ───────────────────────────────────────────────────────
 const loader = new GLTFLoader();
 
+let modelsLoaded = 0;
+const totalModels = 3; // Total number of models to track
+
 // Function to get the appropriate scale for each model based on the current viewport
 function getScaleForBreakpoint(modelScales) {
   const width = window.innerWidth;
@@ -89,26 +92,45 @@ function loadModel(url, scene, modelScales) {
 
       // Add the model to the scene
       scene.add(glb);
+
+      // Increment the modelsLoaded count
+      modelsLoaded++;
+      updateLoaderProgress();
     },
     undefined,
     (err) => console.error(err)
   );
 }
 
+// Function to update the loader progress and check if all models are loaded
+function updateLoaderProgress() {
+  const loaderText = document.querySelector(".loader-text");
+  const progress = Math.floor((modelsLoaded / totalModels) * 100);
+  loaderText.textContent = `${progress}%`;
+
+  // If all models are loaded, delay adding the .loaded class until the progress is 100%
+  if (modelsLoaded === totalModels && progress === 100) {
+    setTimeout(() => {
+      const loadingScreen = document.querySelector(".loading-screen");
+      loadingScreen.classList.add("loaded");
+    }, 200); // 200ms delay to ensure text update before adding the class
+  }
+}
+
 // Load models with different scales for each breakpoint
 loadModel("https://indigo-edge-assets.netlify.app/new-ie_truthmindset.glb", scene1, {
-  mobile: 0.6,    
+  mobile: 0.8,    
   tablet: 0.8,    
   desktop: 0.85      
 });
 loadModel("https://indigo-edge-assets.netlify.app/new-ie_growthmindset_ribs.glb", scene2, {
-  mobile: 0.5,    
+  mobile: 0.7,    
   tablet: 0.7,    
   desktop: 0.9      
 });
 loadModel("https://indigo-edge-assets.netlify.app/new-ie_wolfmindset.glb", scene3, {
-  mobile: 0.4,    
-  tablet: 0.6,    
+  mobile: 0.8,    
+  tablet: 0.7,    
   desktop: 0.9
 });
 
