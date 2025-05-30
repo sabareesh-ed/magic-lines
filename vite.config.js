@@ -19,6 +19,8 @@ export default defineConfig({
       input: {
         main: './src/main.js',
         aboutUs: './src/aboutUs.js',
+        aboutUs: './src/mindset.js',
+        aboutUs: './src/stats.js',
       },
       // Avoid specifying 'umd' format for multiple inputs; let Vite handle the output format
       // If you want to specify output options, do it like this:
