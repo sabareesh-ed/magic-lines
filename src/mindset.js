@@ -135,9 +135,9 @@ loadModel("https://indigo-edge-assets.netlify.app/new-ie_wolfmindset.glb", scene
 });
 
 // ─── Add Light and Axes Helper ──────────────────────────────────────────
-const pointLight = new THREE.PointLight(0xffffff, 10, 10);
-pointLight.position.set(0, 0.8, 0);
-scene1.add(pointLight);
+// const pointLight = new THREE.PointLight(0xffffff, 10, 10);
+// pointLight.position.set(0, 0.8, 0);
+// scene1.add(pointLight);
 
 // ─── Render Loop ───────────────────────────────────────────────────────
 function animate() {
