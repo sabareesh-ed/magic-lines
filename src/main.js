@@ -206,7 +206,7 @@ gsap.registerPlugin(ScrollTrigger);
 const heroTitle = document.getElementById("hero-title");
 const absTitle1 = document.querySelector(".abs-title1");
 const absTitle2 = document.querySelector(".abs-title2");
-const nav = document.querySelector(".nav_fixed");
+const nav = document.querySelector(".nav_component");
 const hero = document.querySelector(".section_hero");
 
 gsap.set(heroTitle, { opacity: 1, y: 0 });
@@ -528,7 +528,7 @@ ScrollTrigger.create({
   onLeaveBack: () => stopModelRotation(),
 });
 
-if (window.innerWidth > 767) {
+//if (window.innerWidth > 767) {
   gsap.to(".team_wrap", {
     x: () => {
       const members =
@@ -547,7 +547,7 @@ if (window.innerWidth > 767) {
       scrub: true,
     },
   });
-}
+//}
 
 if (window.innerWidth > 768) {
   gsap.to(".cta-section-image", {
