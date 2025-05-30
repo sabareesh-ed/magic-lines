@@ -528,7 +528,7 @@ ScrollTrigger.create({
   onLeaveBack: () => stopModelRotation(),
 });
 
-//if (window.innerWidth > 767) {
+if (window.innerWidth > 767) {
   gsap.to(".team_wrap", {
     x: () => {
       const members =
@@ -547,7 +547,46 @@ ScrollTrigger.create({
       scrub: true,
     },
   });
-//}
+}
+
+if (window.innerWidth < 767) {
+  gsap.to(".team_wrap", {
+    x: () => {
+      const members =
+        document.querySelector(".team-wrap_members")?.offsetWidth || 0;
+      const values =
+        document.querySelector(".team_wrap-values")?.offsetWidth || 0;
+      const container =
+        document.querySelector(".container-large")?.offsetWidth || 0;
+      return -(members - container );
+    },
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".hori-scroll-wrap",
+      start: "top top",
+      end: "bottom bottom",
+      scrub: true,
+    },
+  });
+  gsap.to("#founders-heading", {
+    x: () => {
+      const members =
+        document.querySelector(".team-wrap_members")?.offsetWidth || 0;
+      const values =
+        document.querySelector(".team_wrap-values")?.offsetWidth || 0;
+      const container =
+        document.querySelector(".container-large")?.offsetWidth || 0;
+      return (members - container );
+    },
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".hori-scroll-wrap",
+      start: "top top",
+      end: "bottom bottom",
+      scrub: true,
+    },
+  });
+}
 
 if (window.innerWidth > 768) {
   gsap.to(".cta-section-image", {
