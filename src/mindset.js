@@ -118,7 +118,7 @@ function updateLoaderProgress() {
 }
 
 // Load models with different scales for each breakpoint
-loadModel("https://indigo-edge-assets.netlify.app/new-ie_truthmindset.glb", scene1, {
+loadModel("https://indigo-edge-assets.netlify.app/new_truth-mindset-2.glb", scene1, {
   mobile: 0.8,    
   tablet: 0.8,    
   desktop: 0.85      
