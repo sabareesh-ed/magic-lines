@@ -123,7 +123,7 @@ loadModel("https://indigo-edge-assets.netlify.app/new_truth-mindset-2.glb", scen
   tablet: 0.8,    
   desktop: 0.7      
 });
-loadModel("https://indigo-edge-assets.netlify.app/new-ie_growthmindset_ribs.glb", scene2, {
+loadModel("https://indigo-edge-assets.netlify.app/new_truth-mindset-2.glb", scene2, {
   mobile: 0.7,    
   tablet: 0.7,    
   desktop: 0.9      
