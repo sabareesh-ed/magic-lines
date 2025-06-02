@@ -680,6 +680,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
       mindsetItems.forEach((item) => {
         item.querySelector(".mindset_title")?.style.setProperty("color", text);
+        item.querySelector(".mindset_tag")?.style.setProperty("color", text);
         item
           .querySelector(".mindset_subtitle")
           ?.style.setProperty("color", text);
