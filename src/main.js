@@ -255,7 +255,7 @@ gsap.fromTo(
     ease: "power2.out",
     scrollTrigger: {
       trigger: ".section_hero",
-      start: "70% bottom",
+      start: "60% bottom",
       //end: "55.55% bottom",
       toggleActions: "play none none reverse",
     },
@@ -268,7 +268,7 @@ gsap.to([heroTitle, absTitle1, absTitle2], {
   ease: "power2.out",
   scrollTrigger: {
     trigger: ".section_hero",
-    start: "70% bottom",
+    start: "60% bottom",
     //end: "55.55% bottom",
     toggleActions: "play none none reverse",
   },
