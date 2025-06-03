@@ -6,7 +6,6 @@ import SplitType from "split-type";
 import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
-import dat from "dat.gui";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -97,49 +96,9 @@ function setModelColorOpacityMetalness(colorHex, opacity, metalness) {
   });
 }
 
-
-
-
-function initGUI() {
-  const gui = new dat.GUI({ width: 300 });
-
-  gui.add(params, "scale", 0.1, 5, 0.01).name("Uniform Scale").onChange(update);
-
-  const r = gui.addFolder("Rotation");
-  r.add(params, "rotX", -Math.PI, Math.PI, 0.01).name("X").onChange(update);
-  r.add(params, "rotY", -Math.PI, Math.PI, 0.01).name("Y").onChange(update);
-  r.add(params, "rotZ", -Math.PI, Math.PI, 0.01).name("Z").onChange(update);
-  r.open();
-
-  const p = gui.addFolder("Pivot Position");
-  p.add(params, "pivotX", -5, 5, 0.01).name("X").onChange(update);
-  p.add(params, "pivotY", -5, 5, 0.01).name("Y").onChange(update);
-  p.add(params, "pivotZ", -5, 5, 0.01).name("Z").onChange(update);
-  p.open();
-
-  gui
-    .add(
-      {
-        reset() {
-          Object.assign(params, {
-            scale: 1,
-            rotX: 0,
-            rotY: 0,
-            rotZ: 0,
-            pivotX: 0,
-            pivotY: -1,
-            pivotZ: 0,
-          });
-          update();
-          gui.updateDisplay();
-        },
-      },
-      "reset"
-    )
-    .name("↩︎ Reset All");
-}
-
 // ─── Model ─────────────────────────────────────────────────────────────
+
+
 const loader = new GLTFLoader();
 const loadingScreen = document.querySelector(".loading-screen .loader-text");
 
@@ -157,23 +116,18 @@ loader.load(
     model = glb;
     pivot.add(model);
 
-    // Set initial color, opacity, metalness
     setModelColorOpacityMetalness(0xffffff, 0.3, 0.7);
 
-    // Update progress to 100% and add 'loaded' class
     setTimeout(() => {
       loadingScreen.innerText = '100%';
       document.querySelector('.loading-screen').classList.add('loaded');
     }, 200);
 
     update();
-    initGUI();
   },
   (xhr) => {
-    // Calculate loading progress
     progress = (xhr.loaded / xhr.total) * 100;
 
-    // Update loader text
     loadingScreen.innerText = Math.floor(progress) + '%';
   },
   undefined,
@@ -191,7 +145,7 @@ animate();
 
 function resetOnScroll() {
   resize();
-  update();
+  // update();
   // gui.updateDisplay()
 }
 window.addEventListener("scroll", resetOnScroll);
