@@ -14,7 +14,7 @@ const canvas = document.querySelector(".webgl");
 const renderer = new THREE.WebGLRenderer({
   canvas,
   alpha: true,
-  antialias: false,
+  antialias: true,
 });
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -154,9 +154,6 @@ function checkScroll() {
 
 window.addEventListener('scroll', checkScroll);
 
-
-
-
 // ─── Render Loop ───────────────────────────────────────────────────────
 let isRendering = true;
 
@@ -284,7 +281,7 @@ gsap.to(".hero-img", {
 
 // ----------- Sequential fade + slide transitions -----------
 
-// 1. heroTitle fades up and out (33% → 38%)
+// 1. heroTitle fades up and out
 ScrollTrigger.create({
   trigger: ".section_hero",
   start: "top top",
@@ -299,7 +296,7 @@ ScrollTrigger.create({
   },
 });
 
-// 2. absTitle1 fades in and moves up (38% → 43%)
+// 2. absTitle1 fades in and moves up
 ScrollTrigger.create({
   trigger: ".section_hero",
   start: "30% bottom",
@@ -314,8 +311,7 @@ ScrollTrigger.create({
   },
 });
 
-// ----------- absTitle1 chars stagger fade starts after (43% → 66%) -----------
-
+// 3. absTitle1 chars stagger fade starts 
 const splitAbsTitle1 = new SplitType(absTitle1, { types: "chars" });
 gsap.to(splitAbsTitle1.chars, {
   duration: 0.5,
@@ -407,10 +403,6 @@ gsap.to(".webgl_wrapper", {
   },
 });
 
-
-
-
-
 const colorObject = { r: 0xff / 255, g: 0xff / 255, b: 0xff / 255 };
 const opacityObject = { value: 0.3 };
 const metalnessObject = { value: 0.7 };
@@ -455,12 +447,6 @@ gsap.to(metalnessObject, {
     scrub: true,
   },
 });
-
-
-
-
-
-
 
 let rotationTween;
 
