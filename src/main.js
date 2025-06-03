@@ -288,13 +288,29 @@ ScrollTrigger.create({
   end: "30% bottom",
   scrub: true,
   onUpdate: (self) => {
-    const p = self.progress;
-    gsap.set(heroTitle, {
-      y: gsap.utils.interpolate(0, -20, p),
-      opacity: 1 - p,
-    });
+    let p = self.progress;
+
+    // Clamp progress between 0 and 1
+    p = Math.min(Math.max(p, 0), 1);
+
+    // When progress is close to 1 (scrolled past), fix opacity and position
+    if (p > 0.95) {
+      gsap.set(heroTitle, { y: -20, opacity: 0 });
+    } 
+    // When progress is close to 0 (top), fix opacity and position
+    else if (p < 0.05) {
+      gsap.set(heroTitle, { y: 0, opacity: 1 });
+    } 
+    // Otherwise interpolate normally
+    else {
+      gsap.set(heroTitle, {
+        y: gsap.utils.interpolate(0, -20, p),
+        opacity: 1 - p,
+      });
+    }
   },
 });
+
 
 // 2. absTitle1 fades in and moves up
 ScrollTrigger.create({
@@ -603,7 +619,7 @@ document.addEventListener("DOMContentLoaded", () => {
   let current = -1;
   let showTimeout = null;
 
-  /* ───────────────────────────────────────── helpers ───────────────────────────────────────── */
+  /* ── helpers ── */
   function hideAllMindsets() {
     mindsetItems.forEach((item) => {
       item.style.opacity = "0";
