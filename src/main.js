@@ -377,8 +377,8 @@ gsap.to(".webgl_wrapper", {
   duration: 1,
   scrollTrigger: {
     trigger: ".section_hero",
-    start: "55% bottom",
-    end: "84% bottom",
+    start: "40% bottom",
+    end: "90% bottom",
     scrub: true,
     markers: false,
     toggleActions: "play none none reverse",
