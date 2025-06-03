@@ -58,7 +58,11 @@ function loadModel(url, scene, scale) {
 // Load the new model
 loadModel("https://indigo-edge-assets.netlify.app/new_tilted.glb", scene, 0.8);
 
+let isAnimating = false;
+
 function animate() {
+  if (!isAnimating) return;
+
   scene.traverse((child) => {
     if (child.isMesh) {
       child.rotation.y += 0.005;
@@ -68,6 +72,30 @@ function animate() {
   renderer.render(scene, camera);
   requestAnimationFrame(animate);
 }
+
+const sectionStats = document.querySelector('.section_stats');
+
+function checkSectionStatsVisibility() {
+  const rect = sectionStats.getBoundingClientRect();
+  const viewportHeight = window.innerHeight;
+  const startCondition = rect.top <= viewportHeight;
+  const stopCondition = rect.bottom <= 0;
+
+  if (startCondition && !stopCondition) {
+    if (!isAnimating) {
+      isAnimating = true;
+      animate();
+    }
+  } else {
+    if (isAnimating) {
+      isAnimating = false;
+    }
+  }
+}
+
+
+window.addEventListener('scroll', checkSectionStatsVisibility);
+checkSectionStatsVisibility();
 
 animate();
 

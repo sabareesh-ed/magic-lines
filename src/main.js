@@ -134,13 +134,39 @@ loader.load(
   (err) => console.error(err)
 );
 
+const sectionHero = document.querySelector('.section_hero');
+
+function checkScroll() {
+  if (!sectionHero) return;
+
+  const rect = sectionHero.getBoundingClientRect();
+  if (rect.bottom <= 0) {
+    if (isRendering) {
+      isRendering = false;
+    }
+  } else {
+    if (!isRendering) {
+      isRendering = true;
+      animate();
+    }
+  }
+}
+
+window.addEventListener('scroll', checkScroll);
+
+
 
 
 // ─── Render Loop ───────────────────────────────────────────────────────
+let isRendering = true;
+
 function animate() {
-  renderer.render(scene, camera);
-  requestAnimationFrame(animate);
+  if (isRendering) {
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
+  }
 }
+
 animate();
 
 function resetOnScroll() {
