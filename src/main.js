@@ -14,7 +14,7 @@ const canvas = document.querySelector(".webgl");
 const renderer = new THREE.WebGLRenderer({
   canvas,
   alpha: true,
-  antialias: true,
+  antialias: false,
 });
 renderer.outputEncoding = THREE.sRGBEncoding;
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
@@ -177,8 +177,6 @@ function resetOnScroll() {
 window.addEventListener("scroll", resetOnScroll);
 
 
-
-
 // GSAP
 
 gsap.registerPlugin(ScrollTrigger);
@@ -256,7 +254,6 @@ gsap.fromTo(
     scrollTrigger: {
       trigger: ".section_hero",
       start: "60% bottom",
-      //end: "55.55% bottom",
       toggleActions: "play none none reverse",
     },
   });
@@ -269,7 +266,6 @@ gsap.to([heroTitle, absTitle1, absTitle2], {
   scrollTrigger: {
     trigger: ".section_hero",
     start: "60% bottom",
-    //end: "55.55% bottom",
     toggleActions: "play none none reverse",
   },
 });
@@ -599,15 +595,6 @@ if (window.innerWidth > 768) {
 
 window.addEventListener("load", () => ScrollTrigger.refresh());
 
-
-
-
-
-
-
-
-
-
 //  MINDSET SECTION — Scroll-driven, single-accent, overlap-safe
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -627,8 +614,8 @@ document.addEventListener("DOMContentLoaded", () => {
     { bg: "black", text: "#03FF86", accent: "#03FF86" },
   ];
 
-  let current = -1; // tracks active slide
-  let showTimeout = null; // prevents overlapping fades
+  let current = -1;
+  let showTimeout = null;
 
   /* ───────────────────────────────────────── helpers ───────────────────────────────────────── */
   function hideAllMindsets() {
@@ -647,10 +634,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const { bg, text, accent } = mindsets[index];
 
-    /* 1 — Hide everything first */
     hideAllMindsets();
 
-    /* 2 — Reveal the active item after a short pause (smooth fade) */
     showTimeout = setTimeout(() => {
       const active = mindsetItems[index];
       active.style.opacity = "1";
