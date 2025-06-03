@@ -168,7 +168,7 @@ animate();
 
 function resetOnScroll() {
   resize();
-  // update();
+  update();
   // gui.updateDisplay()
 }
 window.addEventListener("scroll", resetOnScroll);
