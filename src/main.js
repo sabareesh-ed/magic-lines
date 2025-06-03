@@ -243,30 +243,30 @@ gsap.fromTo(
   }
 );
 
-const splitHeroTitle = heroTitle
-  ? new SplitType(heroTitle, { types: "chars" })
-  : null;
-if (splitHeroTitle) {
-  gsap.to(splitHeroTitle.chars, {
-    duration: 0.5,
-    stagger: 0.05,
-    scrollTrigger: {
-      trigger: ".section_hero",
-      start: "top-=5.2% top",
-      end: "33% bottom",
-      scrub: true,
-      toggleActions: "play none none reverse",
-      onUpdate: (self) => {
-        const p = self.progress;
-        splitHeroTitle.chars.forEach((c, i) =>
-          gsap.set(c, {
-            opacity: p > i / splitHeroTitle.chars.length ? 1 : 0.3,
-          })
-        );
-      },
-    },
-  });
-}
+// const splitHeroTitle = heroTitle
+//   ? new SplitType(heroTitle, { types: "chars" })
+//   : null;
+// if (splitHeroTitle) {
+//   gsap.to(splitHeroTitle.chars, {
+//     duration: 0.5,
+//     stagger: 0.05,
+//     scrollTrigger: {
+//       trigger: ".section_hero",
+//       start: "top-=100% top",
+//       end: "33.33% bottom",
+//       scrub: true,
+//       toggleActions: "play none none reverse",
+//       onUpdate: (self) => {
+//         const p = self.progress;
+//         splitHeroTitle.chars.forEach((c, i) =>
+//           gsap.set(c, {
+//             opacity: p > i / splitHeroTitle.chars.length ? 1 : 0.3,
+//           })
+//         );
+//       },
+//     },
+//   });
+// }
 
 [".section_hero", ".section_hero .abs-lines"].forEach((sel, i) => {
   gsap.to(sel, {
@@ -275,8 +275,8 @@ if (splitHeroTitle) {
     ease: "power2.out",
     scrollTrigger: {
       trigger: ".section_hero",
-      start: "55% bottom",
-      end: "55% bottom",
+      start: "70% bottom",
+      //end: "55.55% bottom",
       toggleActions: "play none none reverse",
     },
   });
@@ -288,8 +288,8 @@ gsap.to([heroTitle, absTitle1, absTitle2], {
   ease: "power2.out",
   scrollTrigger: {
     trigger: ".section_hero",
-    start: "55% bottom",
-    end: "55% bottom",
+    start: "70% bottom",
+    //end: "55.55% bottom",
     toggleActions: "play none none reverse",
   },
 });
@@ -299,8 +299,8 @@ gsap.to(".hero-img", {
   duration: 1,
   scrollTrigger: {
     trigger: ".section_hero",
-    start: "33% bottom",
-    end: "66% bottom",
+    start: "33.33% bottom",
+    end: "66.66% bottom",
     scrub: true,
     toggleActions: "play none none reverse",
   },
@@ -311,8 +311,8 @@ gsap.to(".hero-img", {
 // 1. heroTitle fades up and out (33% → 38%)
 ScrollTrigger.create({
   trigger: ".section_hero",
-  start: "33% bottom",
-  end: "38% bottom",
+  start: "top top",
+  end: "30% bottom",
   scrub: true,
   onUpdate: (self) => {
     const p = self.progress;
@@ -326,7 +326,7 @@ ScrollTrigger.create({
 // 2. absTitle1 fades in and moves up (38% → 43%)
 ScrollTrigger.create({
   trigger: ".section_hero",
-  start: "38% bottom",
+  start: "30% bottom",
   end: "43% bottom",
   scrub: true,
   onUpdate: (self) => {
