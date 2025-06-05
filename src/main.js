@@ -227,7 +227,7 @@ if (splitHeroTitle) {
     stagger: 0.05,
     scrollTrigger: {
       trigger: ".section_hero",
-      start: "top-=101% top",
+      start: "top-=80% top",
       end: "33.33% bottom",
       //scrub: true,
       toggleActions: "play none none reverse",
