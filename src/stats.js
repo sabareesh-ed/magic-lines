@@ -32,6 +32,24 @@ new RGBELoader().load(
 // ─── Load the New Model ───────────────────────────────────────────────
 const loader = new GLTFLoader();
 
+function setModelColorOpacityMetalness(object, colorHex, opacity, metalness) {
+  object.traverse((child) => {
+    if (child.isMesh) {
+      if (child.material) {
+        child.material = new THREE.MeshStandardMaterial({
+          color: new THREE.Color(colorHex),
+          metalness: metalness,
+          roughness: 1 - metalness,
+          transparent: opacity < 1,
+          opacity: opacity,
+          envMapIntensity: 1,
+        });
+        child.material.needsUpdate = true;
+      }
+    }
+  });
+}
+
 function loadModel(url, scene, scale) {
   loader.load(
     url,
@@ -47,6 +65,9 @@ function loadModel(url, scene, scale) {
       // Scale the model
       glb.scale.set(scale, scale, scale);
 
+      // Apply material modifications
+      setModelColorOpacityMetalness(glb, 0xffffff, 0.6, 0.7);
+
       // Add the model to the scene
       scene.add(glb);
     },
@@ -54,6 +75,7 @@ function loadModel(url, scene, scale) {
     (err) => console.error(err)
   );
 }
+
 
 // Load the new model
 loadModel("https://indigo-edge-assets.netlify.app/new_tilted.glb", scene, 0.8);

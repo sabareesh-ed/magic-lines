@@ -388,7 +388,7 @@ const config = {
   width: "100vw",
   height: isDesktop ? "95vh" : "50vh",
   y: isDesktop ? "-100%" : "-120%",
-  left: isDesktop ? "40%" : "20%",
+  left: isDesktop ? "35%" : "20%",
 };
 
 gsap.to(".webgl_wrapper", {

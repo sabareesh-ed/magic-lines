@@ -61,9 +61,7 @@ function update() {
 
   pivot.rotation.set(params.rotX, params.rotY, params.rotZ);
   pivot.scale.setScalar(params.scale);
-
   pivot.position.set(params.pivotX, params.pivotY, params.pivotZ);
-
   model.position.set(-params.pivotX, -params.pivotY, -params.pivotZ);
 
   if (axes) axes.position.set(0, 0, 0);
