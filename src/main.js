@@ -283,7 +283,6 @@ gsap.to(".hero-img", {
   },
 });
 
-// ----------- Sequential fade + slide transitions -----------
 // 1. heroTitle fades up and out (33% → 38%)
 ScrollTrigger.create({
   trigger: ".section_hero",
@@ -297,6 +296,14 @@ ScrollTrigger.create({
       y: gsap.utils.interpolate(0, -20, p),
       opacity: 1 - p,
     });
+  },
+  onLeave: () => {
+    // Reset if leaving the section
+    gsap.set(heroTitle, { opacity: 1, y: 0 });
+  },
+  onEnterBack: () => {
+    // Reset when scrolling back into the section
+    gsap.set(heroTitle, { opacity: 1, y: 0 });
   },
 });
 
@@ -314,7 +321,16 @@ ScrollTrigger.create({
       opacity: p,
     });
   },
+  onLeave: () => {
+    // Reset if leaving the section
+    gsap.set(absTitle1, { opacity: 0, y: 20 });
+  },
+  onEnterBack: () => {
+    // Reset when scrolling back into the section
+    gsap.set(absTitle1, { opacity: 0, y: 20 });
+  },
 });
+
 
 
 // ----------- absTitle1 chars stagger fade starts after (43% → 66%) -----------
