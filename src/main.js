@@ -233,14 +233,14 @@ if (splitHeroTitle) {
       end: "33% bottom",
       scrub: true,
       toggleActions: "play none none reverse",
-      onUpdate: (self) => {
-        const p = self.progress;
-        splitHeroTitle.chars.forEach((c, i) =>
-          gsap.set(c, {
-            opacity: p > i / splitHeroTitle.chars.length ? 1 : 1,
-          })
-        );
-      },
+      // onUpdate: (self) => {
+      //   const p = self.progress;
+      //   splitHeroTitle.chars.forEach((c, i) =>
+      //     gsap.set(c, {
+      //       opacity: p > i / splitHeroTitle.chars.length ? 1 : 1,
+      //     })
+      //   );
+      // },
     },
   });
 }
