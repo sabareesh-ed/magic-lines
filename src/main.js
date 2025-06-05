@@ -183,7 +183,7 @@ gsap.registerPlugin(ScrollTrigger);
 const heroTitle = document.getElementById("hero-title");
 const absTitle1 = document.querySelector(".abs-title1");
 const absTitle2 = document.querySelector(".abs-title2");
-const nav = document.querySelector(".nav_component");
+const nav = document.querySelector(".nav_fixed");
 const hero = document.querySelector(".section_hero");
 
 gsap.set(heroTitle, { opacity: 1, y: 0 });
@@ -229,15 +229,15 @@ if (splitHeroTitle) {
     stagger: 0.05,
     scrollTrigger: {
       trigger: ".section_hero",
-      start: "top-=80% top",
-      end: "33.33% bottom",
-      //scrub: true,
+      start: "top-=5.2% top",
+      end: "33% bottom",
+      scrub: true,
       toggleActions: "play none none reverse",
       onUpdate: (self) => {
         const p = self.progress;
         splitHeroTitle.chars.forEach((c, i) =>
           gsap.set(c, {
-            opacity: p > i / splitHeroTitle.chars.length ? 1 : 1,
+            opacity: p > i / splitHeroTitle.chars.length ? 1 : 0.3,
           })
         );
       },
@@ -252,7 +252,8 @@ if (splitHeroTitle) {
     ease: "power2.out",
     scrollTrigger: {
       trigger: ".section_hero",
-      start: "60% bottom",
+      start: "55% bottom",
+      end: "55% bottom",
       toggleActions: "play none none reverse",
     },
   });
@@ -264,7 +265,8 @@ gsap.to([heroTitle, absTitle1, absTitle2], {
   ease: "power2.out",
   scrollTrigger: {
     trigger: ".section_hero",
-    start: "60% bottom",
+    start: "55% bottom",
+    end: "55% bottom",
     toggleActions: "play none none reverse",
   },
 });
@@ -274,8 +276,8 @@ gsap.to(".hero-img", {
   duration: 1,
   scrollTrigger: {
     trigger: ".section_hero",
-    start: "33.33% bottom",
-    end: "66.66% bottom",
+    start: "33% bottom",
+    end: "66% bottom",
     scrub: true,
     toggleActions: "play none none reverse",
   },
@@ -283,11 +285,11 @@ gsap.to(".hero-img", {
 
 // ----------- Sequential fade + slide transitions -----------
 
-// 1. heroTitle fades up and out
+// 1. heroTitle fades up and out (33% → 38%)
 ScrollTrigger.create({
   trigger: ".section_hero",
-  start: "top top",
-  end: "30% bottom",
+  start: "33% bottom",
+  end: "38% bottom",
   scrub: true,
   onUpdate: (self) => {
     const p = self.progress;
@@ -298,12 +300,10 @@ ScrollTrigger.create({
   },
 });
 
-
-
-// 2. absTitle1 fades in and moves up
+// 2. absTitle1 fades in and moves up (38% → 43%)
 ScrollTrigger.create({
   trigger: ".section_hero",
-  start: "30% bottom",
+  start: "38% bottom",
   end: "43% bottom",
   scrub: true,
   onUpdate: (self) => {
@@ -315,7 +315,8 @@ ScrollTrigger.create({
   },
 });
 
-// 3. absTitle1 chars stagger fade starts 
+// ----------- absTitle1 chars stagger fade starts after (43% → 66%) -----------
+
 const splitAbsTitle1 = new SplitType(absTitle1, { types: "chars" });
 gsap.to(splitAbsTitle1.chars, {
   duration: 0.5,
