@@ -289,7 +289,7 @@ ScrollTrigger.create({
   trigger: ".section_hero",
   start: "33% bottom",
   end: "38% bottom",
-  scrub: 0.5,
+  scrub: true,
   toggleActions: "restart pause reverse pause", // Ensure it resets on scroll reverse
   onUpdate: (self) => {
     const p = self.progress;
@@ -298,6 +298,14 @@ ScrollTrigger.create({
       opacity: 1 - p,
     });
   },
+  onLeaveBack: () => {
+    // Reset properties when scrolling up to the start of the trigger
+    gsap.set(heroTitle, { opacity: 0, y: 0 });
+  },
+  onEnterBack: () => {
+    // Ensure the animation plays from the beginning when scrolling back into the section
+    gsap.set(heroTitle, { opacity: 1, y: 0 });
+  },
 });
 
 // 2. absTitle1 fades in and moves up (38% → 43%)
@@ -305,7 +313,7 @@ ScrollTrigger.create({
   trigger: ".section_hero",
   start: "38% bottom",
   end: "43% bottom",
-  scrub: 0.5,
+  scrub: true,
   toggleActions: "restart pause reverse pause", // Ensure it resets on scroll reverse
   onUpdate: (self) => {
     const p = self.progress;
@@ -314,7 +322,16 @@ ScrollTrigger.create({
       opacity: p,
     });
   },
+  onLeaveBack: () => {
+    // Reset properties when scrolling up to the start of the trigger
+    gsap.set(absTitle1, { opacity: 0, y: 20 });
+  },
+  onEnterBack: () => {
+    // Ensure the animation plays from the beginning when scrolling back into the section
+    gsap.set(absTitle1, { opacity: 0, y: 20 });
+  },
 });
+
 
 
 // ----------- absTitle1 chars stagger fade starts after (43% → 66%) -----------
