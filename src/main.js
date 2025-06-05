@@ -281,8 +281,9 @@ gsap.to(".hero-img", {
 
 // ----------- Sequential fade + slide transitions -----------
 
-// Initialize ScrollTrigger
-const scrollTrigger = ScrollTrigger.create({
+let lastScrollY = window.scrollY;
+
+ScrollTrigger.create({
   trigger: ".section_hero",
   start: "top top",
   end: "30% bottom",
@@ -291,28 +292,37 @@ const scrollTrigger = ScrollTrigger.create({
     let p = self.progress;
     p = Math.min(Math.max(p, 0), 1);
 
-    // Define the threshold for slow scroll
-    const threshold = 0.05;
-
+    // Check if scrolling has passed the threshold
     if (p > 0.95) {
       gsap.set(heroTitle, { y: -20, opacity: 0 });
     } 
-    else if (p < threshold) {
+    else if (p < 0.05) {
       gsap.set(heroTitle, { y: 0, opacity: 1 });
     } 
     else {
       gsap.set(heroTitle, {
         y: gsap.utils.interpolate(0, -20, p),
-        opacity: gsap.utils.interpolate(1, 0, p),
+        opacity: 1 - p,
       });
     }
   },
+  onComplete: () => {
+    // On completion of animation, make the title fully transparent
+    gsap.set(heroTitle, { opacity: 0 });
+  },
+  onStart: () => {
+    // Reset opacity when scrolling starts
+    gsap.set(heroTitle, { opacity: 1 });
+  }
 });
 
-// Listen for resize events to refresh ScrollTrigger on iOS
-window.addEventListener("resize", () => {
-  // Call ScrollTrigger.refresh() on resize event to recalculate scroll positions
-  ScrollTrigger.refresh();
+// Monitor scroll direction to fade in heroTitle when scrolling up
+window.addEventListener('scroll', () => {
+  if (window.scrollY < lastScrollY) {
+    // Scrolling up, fade in heroTitle
+    gsap.set(heroTitle, { opacity: 1 });
+  }
+  lastScrollY = window.scrollY;
 });
 
 
