@@ -284,13 +284,13 @@ gsap.to(".hero-img", {
 });
 
 // ----------- Sequential fade + slide transitions -----------
-
 // 1. heroTitle fades up and out (33% → 38%)
 ScrollTrigger.create({
   trigger: ".section_hero",
   start: "33% bottom",
   end: "38% bottom",
   scrub: true,
+  toggleActions: "restart pause reverse pause", // Ensure it resets on scroll reverse
   onUpdate: (self) => {
     const p = self.progress;
     gsap.set(heroTitle, {
@@ -306,6 +306,7 @@ ScrollTrigger.create({
   start: "38% bottom",
   end: "43% bottom",
   scrub: true,
+  toggleActions: "restart pause reverse pause", // Ensure it resets on scroll reverse
   onUpdate: (self) => {
     const p = self.progress;
     gsap.set(absTitle1, {
@@ -314,6 +315,7 @@ ScrollTrigger.create({
     });
   },
 });
+
 
 // ----------- absTitle1 chars stagger fade starts after (43% → 66%) -----------
 
