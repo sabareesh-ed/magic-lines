@@ -229,7 +229,7 @@ if (splitHeroTitle) {
     stagger: 0.05,
     scrollTrigger: {
       trigger: ".section_hero",
-      start: "top-=5.2% top",
+      start: "top-=90% top",
       end: "33% bottom",
       scrub: true,
       toggleActions: "play none none reverse",
@@ -237,7 +237,7 @@ if (splitHeroTitle) {
         const p = self.progress;
         splitHeroTitle.chars.forEach((c, i) =>
           gsap.set(c, {
-            opacity: p > i / splitHeroTitle.chars.length ? 1 : 0.3,
+            opacity: p > i / splitHeroTitle.chars.length ? 1 : 1,
           })
         );
       },
