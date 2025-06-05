@@ -289,27 +289,27 @@ ScrollTrigger.create({
   scrub: true,
   onUpdate: (self) => {
     let p = self.progress;
-
-    // Clamp progress between 0 and 1
     p = Math.min(Math.max(p, 0), 1);
 
-    // When progress is close to 1 (scrolled past), fix opacity and position
+    // Define the threshold where the opacity transition should stop being interpolated.
+    const threshold = 0.05;
+
     if (p > 0.95) {
       gsap.set(heroTitle, { y: -20, opacity: 0 });
     } 
-    // When progress is close to 0 (top), fix opacity and position
-    else if (p < 0.05) {
+    else if (p < threshold) {
       gsap.set(heroTitle, { y: 0, opacity: 1 });
     } 
-    // Otherwise interpolate normally
     else {
+      // Apply linear interpolation for y and opacity, but clamp it around the edges for smoother behavior.
       gsap.set(heroTitle, {
         y: gsap.utils.interpolate(0, -20, p),
-        opacity: 1 - p,
+        opacity: gsap.utils.interpolate(1, 0, p),
       });
     }
   },
 });
+
 
 
 // 2. absTitle1 fades in and moves up
@@ -386,7 +386,7 @@ const isDesktop = window.innerWidth > 768;
 
 const config = {
   width: "100vw",
-  height: isDesktop ? "95vh" : "50vh",
+  height: isDesktop ? "95vh" : "60vh",
   y: isDesktop ? "-100%" : "-120%",
   left: isDesktop ? "35%" : "20%",
 };
