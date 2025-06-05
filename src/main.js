@@ -220,30 +220,30 @@ gsap.fromTo(
   }
 );
 
-const splitHeroTitle = heroTitle
-  ? new SplitType(heroTitle, { types: "chars" })
-  : null;
-if (splitHeroTitle) {
-  gsap.to(splitHeroTitle.chars, {
-    duration: 0.5,
-    stagger: 0.05,
-    scrollTrigger: {
-      trigger: ".section_hero",
-      start: "top-=90% top",
-      end: "33% bottom",
-      scrub: true,
-      toggleActions: "play none none reverse",
-      // onUpdate: (self) => {
-      //   const p = self.progress;
-      //   splitHeroTitle.chars.forEach((c, i) =>
-      //     gsap.set(c, {
-      //       opacity: p > i / splitHeroTitle.chars.length ? 1 : 1,
-      //     })
-      //   );
-      // },
-    },
-  });
-}
+// const splitHeroTitle = heroTitle
+//   ? new SplitType(heroTitle, { types: "chars" })
+//   : null;
+// if (splitHeroTitle) {
+//   gsap.to(splitHeroTitle.chars, {
+//     duration: 0.5,
+//     stagger: 0.05,
+//     scrollTrigger: {
+//       trigger: ".section_hero",
+//       start: "top-=90% top",
+//       end: "33% bottom",
+//       scrub: true,
+//       toggleActions: "play none none reverse",
+//       // onUpdate: (self) => {
+//       //   const p = self.progress;
+//       //   splitHeroTitle.chars.forEach((c, i) =>
+//       //     gsap.set(c, {
+//       //       opacity: p > i / splitHeroTitle.chars.length ? 1 : 1,
+//       //     })
+//       //   );
+//       // },
+//     },
+//   });
+// }
 
 [".section_hero", ".section_hero .abs-lines"].forEach((sel, i) => {
   gsap.to(sel, {
