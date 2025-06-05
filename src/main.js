@@ -281,8 +281,7 @@ gsap.to(".hero-img", {
 
 // ----------- Sequential fade + slide transitions -----------
 
-let lastScrollY = window.scrollY;
-
+// 1. heroTitle fades up and out
 ScrollTrigger.create({
   trigger: ".section_hero",
   start: "top top",
@@ -290,41 +289,27 @@ ScrollTrigger.create({
   scrub: true,
   onUpdate: (self) => {
     let p = self.progress;
+    console.log(p);
     p = Math.min(Math.max(p, 0), 1);
 
-    // Check if scrolling has passed the threshold
+    // Define the threshold where the opacity transition should stop being interpolated.
+    const threshold = 0.05;
+
     if (p > 0.95) {
       gsap.set(heroTitle, { y: -20, opacity: 0 });
     } 
-    else if (p < 0.05) {
+    else if (p < threshold) {
       gsap.set(heroTitle, { y: 0, opacity: 1 });
     } 
     else {
+      // Apply linear interpolation for y and opacity, but clamp it around the edges for smoother behavior.
       gsap.set(heroTitle, {
         y: gsap.utils.interpolate(0, -20, p),
-        opacity: 1 - p,
+        opacity: gsap.utils.interpolate(1, 0, p),
       });
     }
   },
-  onComplete: () => {
-    // On completion of animation, make the title fully transparent
-    gsap.set(heroTitle, { opacity: 0 });
-  },
-  onStart: () => {
-    // Reset opacity when scrolling starts
-    gsap.set(heroTitle, { opacity: 1 });
-  }
 });
-
-// Monitor scroll direction to fade in heroTitle when scrolling up
-window.addEventListener('scroll', () => {
-  if (window.scrollY < lastScrollY) {
-    // Scrolling up, fade in heroTitle
-    gsap.set(heroTitle, { opacity: 1 });
-  }
-  lastScrollY = window.scrollY;
-});
-
 
 
 
