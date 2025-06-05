@@ -220,30 +220,30 @@ gsap.fromTo(
   }
 );
 
-const splitHeroTitle = heroTitle
-  ? new SplitType(heroTitle, { types: "chars" })
-  : null;
-if (splitHeroTitle) {
-  gsap.to(splitHeroTitle.chars, {
-    duration: 0.5,
-    stagger: 0.05,
-    scrollTrigger: {
-      trigger: ".section_hero",
-      start: "top-=80% top",
-      end: "33.33% bottom",
-      //scrub: true,
-      toggleActions: "play none none reverse",
-      onUpdate: (self) => {
-        const p = self.progress;
-        splitHeroTitle.chars.forEach((c, i) =>
-          gsap.set(c, {
-            opacity: p > i / splitHeroTitle.chars.length ? 1 : 1,
-          })
-        );
-      },
-    },
-  });
-}
+// const splitHeroTitle = heroTitle
+//   ? new SplitType(heroTitle, { types: "chars" })
+//   : null;
+// if (splitHeroTitle) {
+//   gsap.to(splitHeroTitle.chars, {
+//     duration: 0.5,
+//     stagger: 0.05,
+//     scrollTrigger: {
+//       trigger: ".section_hero",
+//       start: "top-=80% top",
+//       end: "33.33% bottom",
+//       //scrub: true,
+//       toggleActions: "play none none reverse",
+//       onUpdate: (self) => {
+//         const p = self.progress;
+//         splitHeroTitle.chars.forEach((c, i) =>
+//           gsap.set(c, {
+//             opacity: p > i / splitHeroTitle.chars.length ? 1 : 1,
+//           })
+//         );
+//       },
+//     },
+//   });
+// }
 
 [".section_hero", ".section_hero .abs-lines"].forEach((sel, i) => {
   gsap.to(sel, {
@@ -290,26 +290,11 @@ ScrollTrigger.create({
   end: "30% bottom",
   scrub: true,
   onUpdate: (self) => {
-    let p = self.progress;
-    console.log(p);
-    p = Math.min(Math.max(p, 0), 1);
-
-    // Define the threshold where the opacity transition should stop being interpolated.
-    const threshold = 0.05;
-
-    if (p > 0.95) {
-      gsap.set(heroTitle, { y: -20, opacity: 0 });
-    } 
-    else if (p < threshold) {
-      gsap.set(heroTitle, { y: 0, opacity: 1 });
-    } 
-    else {
-      // Apply linear interpolation for y and opacity, but clamp it around the edges for smoother behavior.
-      gsap.set(heroTitle, {
-        y: gsap.utils.interpolate(0, -20, p),
-        opacity: gsap.utils.interpolate(1, 0, p),
-      });
-    }
+    const p = self.progress;
+    gsap.set(heroTitle, {
+      y: gsap.utils.interpolate(0, -20, p),
+      opacity: 1 - p,
+    });
   },
 });
 
