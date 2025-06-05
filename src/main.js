@@ -281,8 +281,8 @@ gsap.to(".hero-img", {
 
 // ----------- Sequential fade + slide transitions -----------
 
-// 1. heroTitle fades up and out
-ScrollTrigger.create({
+// Initialize ScrollTrigger
+const scrollTrigger = ScrollTrigger.create({
   trigger: ".section_hero",
   start: "top top",
   end: "30% bottom",
@@ -291,7 +291,7 @@ ScrollTrigger.create({
     let p = self.progress;
     p = Math.min(Math.max(p, 0), 1);
 
-    // Define the threshold where the opacity transition should stop being interpolated.
+    // Define the threshold for slow scroll
     const threshold = 0.05;
 
     if (p > 0.95) {
@@ -301,7 +301,6 @@ ScrollTrigger.create({
       gsap.set(heroTitle, { y: 0, opacity: 1 });
     } 
     else {
-      // Apply linear interpolation for y and opacity, but clamp it around the edges for smoother behavior.
       gsap.set(heroTitle, {
         y: gsap.utils.interpolate(0, -20, p),
         opacity: gsap.utils.interpolate(1, 0, p),
@@ -309,6 +308,13 @@ ScrollTrigger.create({
     }
   },
 });
+
+// Listen for resize events to refresh ScrollTrigger on iOS
+window.addEventListener("resize", () => {
+  // Call ScrollTrigger.refresh() on resize event to recalculate scroll positions
+  ScrollTrigger.refresh();
+});
+
 
 
 
