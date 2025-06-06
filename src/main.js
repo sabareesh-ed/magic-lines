@@ -301,7 +301,7 @@ ScrollTrigger.create({
 });
 
 // 2. absTitle1 fades in and moves up (38% → 43%)
-ScrollTrigger.create({
+ScrollTrigger.create({ 
   trigger: ".section_hero",
   start: "38% bottom",
   end: "43% bottom",
