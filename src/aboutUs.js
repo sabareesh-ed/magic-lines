@@ -163,7 +163,7 @@ function loadModelWithProgress(url) {
       // Once the model is loaded, add a delay before removing the loading screen
       setTimeout(() => {
         document.querySelector(".loading-screen").classList.add("loaded");
-      }, 200); // 200ms delay after load
+      }, 600); // 600ms delay after load
     },
     // On progress callback
     (xhr) => {

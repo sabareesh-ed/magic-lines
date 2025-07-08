@@ -102,7 +102,7 @@ function setModelColorOpacityMetalness(colorHex, opacity, metalness) {
 
 
 const loader = new GLTFLoader();
-const loadingScreen = document.querySelector(".loading-screen .loader-text");
+const loaderPercent = document.querySelector(".loader-progressbar");
 
 let progress = 0;
 
@@ -121,16 +121,16 @@ loader.load(
     setModelColorOpacityMetalness(0xffffff, 0.3, 0.7);
 
     setTimeout(() => {
-      loadingScreen.innerText = '100%';
+      loaderPercent.style.width = '100%';
       document.querySelector('.loading-screen').classList.add('loaded');
-    }, 200);
+    }, 600);
 
     update();
   },
   (xhr) => {
     progress = (xhr.loaded / xhr.total) * 100;
 
-    loadingScreen.innerText = Math.floor(progress) + '%';
+    loaderPercent.style.width = Math.floor(progress) + '%';
   },
   undefined,
   (err) => console.error(err)
