@@ -122,6 +122,7 @@ loader.load(
 
     setTimeout(() => {
       loaderPercent.style.width = '100%';
+      document.querySelector(".loader-progressbar-wrap").classList.add("loaded");
       document.querySelector('.loading-screen').classList.add('loaded');
     }, 600);
 
