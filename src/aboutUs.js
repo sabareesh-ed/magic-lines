@@ -137,8 +137,8 @@ function initGUI() {
 
 // Create a function to show the loading progress
 function updateLoadingProgress(progress) {
-  const loaderText = document.querySelector(".loader-text");
-  loaderText.textContent = `${Math.round(progress * 100)}%`;
+  const loaderPercent = document.querySelector(".loader-progressbar");
+  loaderPercent.style.width = `${Math.round(progress * 100)}%`;
 }
 
 // Create a function to handle model loading with progress and completion
