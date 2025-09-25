@@ -77,8 +77,22 @@ function loadModel(url, scene, scale) {
 }
 
 
-// Load the new model
-loadModel("https://indigo-edge-assets.netlify.app/new_tilted.glb", scene, 0.2);
+function getScaleForScreen(width) {
+  const minW = 1240, maxW = 1900;
+  const minS = 0.5,  maxS = 0.8;
+
+  // Clamp width between minW and maxW
+  const clampedW = Math.min(Math.max(width, minW), maxW);
+
+  // Linear interpolation
+  const t = (clampedW - minW) / (maxW - minW);
+  return minS + t * (maxS - minS);
+}
+
+// Usage
+const scale = getScaleForScreen(window.innerWidth);
+loadModel("https://indigo-edge-assets.netlify.app/new_tilted.glb", scene, scale);
+
 
 let isAnimating = false;
 
