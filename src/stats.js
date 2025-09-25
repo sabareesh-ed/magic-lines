@@ -78,7 +78,7 @@ function loadModel(url, scene, scale) {
 
 
 // Load the new model
-loadModel("https://indigo-edge-assets.netlify.app/new_tilted.glb", scene, 0.7);
+loadModel("https://indigo-edge-assets.netlify.app/new_tilted.glb", scene, 0.2);
 
 let isAnimating = false;
 
