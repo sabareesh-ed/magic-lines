@@ -79,7 +79,7 @@ function loadModel(url, scene, scale) {
 
 function getScaleForScreen(width) {
   const minW = 1240, maxW = 1900;
-  const minS = 0.5,  maxS = 0.8;
+  const minS = 0.6,  maxS = 0.8;
 
   // Clamp width between minW and maxW
   const clampedW = Math.min(Math.max(width, minW), maxW);
