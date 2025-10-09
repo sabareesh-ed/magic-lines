@@ -8,7 +8,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
 gsap.registerPlugin(ScrollTrigger);
-// ScrollTrigger.normalizeScroll(true);
+ScrollTrigger.normalizeScroll(true);
 const canvas = document.querySelector(".webgl");
 
 const renderer = new THREE.WebGLRenderer({
@@ -284,159 +284,95 @@ gsap.to(".hero-img", {
   },
 });
 
-// // ----------- Sequential fade + slide transitions -----------
-// // 1. heroTitle fades up and out (33% → 38%)
-// ScrollTrigger.create({
-//   trigger: ".section_hero",
-//   start: "33% bottom",
-//   end: "38% bottom",
-//   scrub: true,
-//   // scrub: 0.3,
-//   toggleActions: "restart pause reverse pause", // Ensure it resets on scroll reverse
-//   onUpdate: (self) => {
-//     const p = self.progress;
-//     gsap.set(heroTitle, {
-//       y: gsap.utils.interpolate(0, -20, p),
-//       opacity: 1 - p,
-//     });
-//   },
-// });
-
-// // 2. absTitle1 fades in and moves up (38% → 43%)
-// ScrollTrigger.create({ 
-//   trigger: ".section_hero",
-//   start: "38% bottom",
-//   end: "43% bottom",
-//   scrub: true,
-//   // scrub: 0.3,
-//   toggleActions: "restart pause reverse pause", // Ensure it resets on scroll reverse
-//   onUpdate: (self) => {
-//     const p = self.progress;
-//     gsap.set(absTitle1, {
-//       y: gsap.utils.interpolate(20, 0, p),
-//       opacity: p,
-//     });
-//   },
-// });
-
-
-// // ----------- absTitle1 chars stagger fade starts after (43% → 66%) -----------
-
-// const splitAbsTitle1 = new SplitType(absTitle1, { types: "chars" });
-// gsap.to(splitAbsTitle1.chars, {
-//   duration: 0.5,
-//   stagger: 0.05,
-//   scrollTrigger: {
-//     trigger: ".section_hero",
-//     start: "43% bottom",
-//     end: "80% bottom",
-//     scrub: true,
-//     toggleActions: "play reverse play reverse",
-//     onUpdate: (self) => {
-//       const p = self.progress;
-//       splitAbsTitle1.chars.forEach((c, i) =>
-//         gsap.set(c, { opacity: p > i / splitAbsTitle1.chars.length ? 1 : 0.3 })
-//       );
-//     },
-//   },
-// });
-
-// CHATGPT START
-// Pre-split chars
-const split1 = new SplitType(absTitle1, { types: "chars" });
-const split2 = new SplitType(absTitle2, { types: "chars" });
-
-// Master timeline along scroll
-const master = gsap.timeline({
-  scrollTrigger: {
-    trigger: ".section_hero",
-    start: "33% bottom",
-    end: "100% bottom",
-    scrub: true,
-    // you can also use `anticipatePin` or margin tweaks if needed
+// ----------- Sequential fade + slide transitions -----------
+// 1. heroTitle fades up and out (33% → 38%)
+ScrollTrigger.create({
+  trigger: ".section_hero",
+  start: "33% bottom",
+  end: "38% bottom",
+  scrub: true,
+  // scrub: 0.3,
+  toggleActions: "restart pause reverse pause", // Ensure it resets on scroll reverse
+  onUpdate: (self) => {
+    const p = self.progress;
+    gsap.set(heroTitle, {
+      y: gsap.utils.interpolate(0, -20, p),
+      opacity: 1 - p,
+    });
   },
-  defaults: { ease: "none" },
 });
 
-// Labels and segments (you can adjust where labels fall)
-master
-  // 1. heroTitle fade-out + move (33 → 38)
-  .addLabel("hero-out", 0)
-  .to(heroTitle, { y: -20, autoAlpha: 0 }, "hero-out")
+// 2. absTitle1 fades in and moves up (38% → 43%)
+ScrollTrigger.create({ 
+  trigger: ".section_hero",
+  start: "38% bottom",
+  end: "43% bottom",
+  scrub: true,
+  // scrub: 0.3,
+  toggleActions: "restart pause reverse pause", // Ensure it resets on scroll reverse
+  onUpdate: (self) => {
+    const p = self.progress;
+    gsap.set(absTitle1, {
+      y: gsap.utils.interpolate(20, 0, p),
+      opacity: p,
+    });
+  },
+});
 
-  // 2. absTitle1 fade in + move (38 → 43)
-  .addLabel("title1-in", 0.2)
-  .fromTo(
-    absTitle1,
-    { y: 20, autoAlpha: 0 },
-    { y: 0, autoAlpha: 1 },
-    "title1-in"
-  )
 
-  // 3. absTitle1 char reveal (starts a bit after title1-in, going until maybe midrange)
-  .addLabel("title1-chars", 0.35)
-  .to(
-    split1.chars,
-    {
-      autoAlpha: 1,
-      // Use `stagger` with some easing so it’s smooth
-      stagger: { each: 0.05, from: "start" },
+// ----------- absTitle1 chars stagger fade starts after (43% → 66%) -----------
+
+const splitAbsTitle1 = new SplitType(absTitle1, { types: "chars" });
+gsap.to(splitAbsTitle1.chars, {
+  duration: 0.5,
+  stagger: 0.05,
+  scrollTrigger: {
+    trigger: ".section_hero",
+    start: "43% bottom",
+    end: "80% bottom",
+    scrub: true,
+    toggleActions: "play reverse play reverse",
+    onUpdate: (self) => {
+      const p = self.progress;
+      splitAbsTitle1.chars.forEach((c, i) =>
+        gsap.set(c, { opacity: p > i / splitAbsTitle1.chars.length ? 1 : 0.3 })
+      );
     },
-    "title1-chars"
-  )
+  },
+});
 
-  // 4. fade out title1 & fade in title2 overlapping (maybe 80 → 90)
-  .addLabel("crossfade", 0.7)
-  .to(absTitle1, { autoAlpha: 0 }, "crossfade")
-  .fromTo(absTitle2, { autoAlpha: 0 }, { autoAlpha: 1 }, "crossfade")
 
-  // 5. title2 char reveal
-  .addLabel("title2-chars", 0.8)
-  .to(
-    split2.chars,
-    {
-      autoAlpha: 1,
-      stagger: { each: 0.05, from: "start" },
+const tl2 = gsap.timeline({
+  scrollTrigger: {
+    trigger: ".section_hero",
+    start: "80% bottom",
+    end: "100% top",
+    scrub: false,
+    toggleActions: "play none none reverse",
+  },
+  defaults: { duration: 0.2 },
+});
+
+tl2.to(absTitle1, { opacity: 0 }).to(absTitle2, { opacity: 1 }, 0);
+
+const splitAbsTitle2 = new SplitType(absTitle2, { types: "chars" });
+gsap.to(splitAbsTitle2.chars, {
+  duration: 0.5,
+  stagger: 0.05,
+  scrollTrigger: {
+    trigger: ".section_hero",
+    start: "80% bottom",
+    end: "100% bottom",
+    scrub: true,
+    toggleActions: "play reverse play reverse",
+    onUpdate: (self) => {
+      const p = self.progress;
+      splitAbsTitle2.chars.forEach((c, i) =>
+        gsap.set(c, { opacity: p > i / splitAbsTitle2.chars.length ? 1 : 0.3 })
+      );
     },
-    "title2-chars"
-  );
-
-// Optionally: early hide chars of title2 initially
-split2.chars.forEach((c) => gsap.set(c, { autoAlpha: 0 }));
-
-// CHATGPT ENDS
-
-// const tl2 = gsap.timeline({
-//   scrollTrigger: {
-//     trigger: ".section_hero",
-//     start: "80% bottom",
-//     end: "100% top",
-//     scrub: false,
-//     toggleActions: "play none none reverse",
-//   },
-//   defaults: { duration: 0.2 },
-// });
-
-// tl2.to(absTitle1, { opacity: 0 }).to(absTitle2, { opacity: 1 }, 0);
-
-// const splitAbsTitle2 = new SplitType(absTitle2, { types: "chars" });
-// gsap.to(splitAbsTitle2.chars, {
-//   duration: 0.5,
-//   stagger: 0.05,
-//   scrollTrigger: {
-//     trigger: ".section_hero",
-//     start: "80% bottom",
-//     end: "100% bottom",
-//     scrub: true,
-//     toggleActions: "play reverse play reverse",
-//     onUpdate: (self) => {
-//       const p = self.progress;
-//       splitAbsTitle2.chars.forEach((c, i) =>
-//         gsap.set(c, { opacity: p > i / splitAbsTitle2.chars.length ? 1 : 0.3 })
-//       );
-//     },
-//   },
-// });
+  },
+});
 
 
 
