@@ -341,7 +341,8 @@ gsap.to(".hero-img", {
 //   },
 // });
 
-// Helper: Animate element with fade and slide on scroll
+// CHATGPT START
+// --------- Shared fade+slide helper ---------
 function fadeSlide(trigger, start, end, element, fromY, toY, fromOpacity, toOpacity) {
   ScrollTrigger.create({
     trigger,
@@ -359,15 +360,16 @@ function fadeSlide(trigger, start, end, element, fromY, toY, fromOpacity, toOpac
   });
 }
 
+// --------- Section: .section_hero ---------
+
 // 1. heroTitle fades up and out (33% → 38%)
 fadeSlide(".section_hero", "33% bottom", "38% bottom", heroTitle, 0, -20, 1, 0);
 
 // 2. absTitle1 fades in and moves up (38% → 43%)
 fadeSlide(".section_hero", "38% bottom", "43% bottom", absTitle1, 20, 0, 0, 1);
 
-// 3. Stagger fade-in of absTitle1 chars (43% → 80%)
+// 3. absTitle1 chars stagger fade-in (43% → 80%)
 const splitAbsTitle1 = new SplitType(absTitle1, { types: "chars" });
-
 ScrollTrigger.create({
   trigger: ".section_hero",
   start: "43% bottom",
@@ -377,16 +379,15 @@ ScrollTrigger.create({
   onUpdate: (self) => {
     const p = self.progress;
     const total = splitAbsTitle1.chars.length;
-    splitAbsTitle1.chars.forEach((char, i) => {
-      gsap.set(char, {
+    splitAbsTitle1.chars.forEach((c, i) => {
+      gsap.set(c, {
         opacity: p > i / total ? 1 : 0.3,
       });
     });
   },
 });
 
-
-
+// 4. Timeline to crossfade absTitle1 → absTitle2 (80% → 100%)
 const tl2 = gsap.timeline({
   scrollTrigger: {
     trigger: ".section_hero",
@@ -400,24 +401,58 @@ const tl2 = gsap.timeline({
 
 tl2.to(absTitle1, { opacity: 0 }).to(absTitle2, { opacity: 1 }, 0);
 
+// 5. absTitle2 chars stagger fade-in (80% → 100%)
 const splitAbsTitle2 = new SplitType(absTitle2, { types: "chars" });
-gsap.to(splitAbsTitle2.chars, {
-  duration: 0.5,
-  stagger: 0.05,
-  scrollTrigger: {
-    trigger: ".section_hero",
-    start: "80% bottom",
-    end: "100% bottom",
-    scrub: true,
-    toggleActions: "play reverse play reverse",
-    onUpdate: (self) => {
-      const p = self.progress;
-      splitAbsTitle2.chars.forEach((c, i) =>
-        gsap.set(c, { opacity: p > i / splitAbsTitle2.chars.length ? 1 : 0.3 })
-      );
-    },
+ScrollTrigger.create({
+  trigger: ".section_hero",
+  start: "80% bottom",
+  end: "100% bottom",
+  scrub: true,
+  toggleActions: "play reverse play reverse",
+  onUpdate: (self) => {
+    const p = self.progress;
+    const total = splitAbsTitle2.chars.length;
+    splitAbsTitle2.chars.forEach((c, i) => {
+      gsap.set(c, {
+        opacity: p > i / total ? 1 : 0.3,
+      });
+    });
   },
 });
+
+// CHATGPT ENDS
+
+// const tl2 = gsap.timeline({
+//   scrollTrigger: {
+//     trigger: ".section_hero",
+//     start: "80% bottom",
+//     end: "100% top",
+//     scrub: false,
+//     toggleActions: "play none none reverse",
+//   },
+//   defaults: { duration: 0.2 },
+// });
+
+// tl2.to(absTitle1, { opacity: 0 }).to(absTitle2, { opacity: 1 }, 0);
+
+// const splitAbsTitle2 = new SplitType(absTitle2, { types: "chars" });
+// gsap.to(splitAbsTitle2.chars, {
+//   duration: 0.5,
+//   stagger: 0.05,
+//   scrollTrigger: {
+//     trigger: ".section_hero",
+//     start: "80% bottom",
+//     end: "100% bottom",
+//     scrub: true,
+//     toggleActions: "play reverse play reverse",
+//     onUpdate: (self) => {
+//       const p = self.progress;
+//       splitAbsTitle2.chars.forEach((c, i) =>
+//         gsap.set(c, { opacity: p > i / splitAbsTitle2.chars.length ? 1 : 0.3 })
+//       );
+//     },
+//   },
+// });
 
 
 
