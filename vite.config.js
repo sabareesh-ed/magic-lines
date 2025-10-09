@@ -1,7 +1,9 @@
 import { defineConfig } from 'vite';
 import glsl from 'vite-plugin-glsl';
-
 export default defineConfig({
+  optimizeDeps: {
+    include: ['gsap', 'gsap/ScrollTrigger'],
+  },
   plugins: [glsl()],
   server: {
     host: 'localhost',
