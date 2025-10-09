@@ -501,46 +501,41 @@ ScrollTrigger.create({
 /* |START| Horizontal Scroll*/
 
 
-
-if (typeof window !== "undefined" && typeof window.matchMedia === "function") {
-  var gsapMediaQ = gsap.matchMedia();
-
-  gsapMediaQ.add("(min-width: 768px)", () => {
-    gsap.to(".team_wrap", {
-      x: () => {
-        const element = document.querySelector(".team_wrap");
-        const viewportWidth = window.innerWidth;
-        const elementRect = element.getBoundingClientRect();
-        const offsetToMove = elementRect.right - viewportWidth;
-        return -(offsetToMove);
-      },
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".hori-scroll-wrap",
-        start: "top top",
-        end: "bottom bottom",
-        scrub: true,
-      },
-    });
+if(window.innerWidth >= 768) {
+  gsap.to(".team_wrap", {
+    x: () => {
+      const element = document.querySelector(".team_wrap");
+      const viewportWidth = window.innerWidth;
+      const elementRect = element.getBoundingClientRect();
+      const offsetToMove = elementRect.right - viewportWidth;
+      return -(offsetToMove);
+    },
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".hori-scroll-wrap",
+      start: "top top",
+      end: "bottom bottom",
+      scrub: true,
+    },
   });
-
-  gsapMediaQ.add("(max-width: 767px)", () => {
-    gsap.to(".court-center", {
-      x: () => {
-        const element = document.querySelector(".court-lineup");
-        const viewportWidth = window.innerWidth;
-        const elementRect = element.getBoundingClientRect();
-        const offsetToMove = elementRect.right - viewportWidth;
-        return -(offsetToMove + 48);
-      },
-      ease: "none",
-      scrollTrigger: {
-        trigger: ".hori-scroll-wrap",
-        start: "top top",
-        end: "bottom bottom",
-        scrub: true,
-      },
-    });
+}
+    
+if(window.innerWidth <= 767){
+  gsap.to(".court-center", {
+    x: () => {
+      const element = document.querySelector(".court-lineup");
+      const viewportWidth = window.innerWidth;
+      const elementRect = element.getBoundingClientRect();
+      const offsetToMove = elementRect.right - viewportWidth;
+      return -(offsetToMove + 48);
+    },
+    ease: "none",
+    scrollTrigger: {
+      trigger: ".hori-scroll-wrap",
+      start: "top top",
+      end: "bottom bottom",
+      scrub: true,
+    },
   });
 }
 /* |END| Horizontal Scroll*/
