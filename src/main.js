@@ -500,11 +500,11 @@ ScrollTrigger.create({
 
 /* |START| Horizontal Scroll*/
 
-let gsapMediaQ;
+var gsapMediaQ;
 
 if (typeof window !== "undefined" && typeof window.matchMedia === "function") {
   gsapMediaQ = gsap.matchMedia();
-  
+
   gsapMediaQ.add("(min-width: 768px)", () => {
     gsap.to(".team_wrap", {
       x: () => {
