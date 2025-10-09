@@ -521,7 +521,7 @@ if(window.innerWidth >= 768) {
 }
     
 if(window.innerWidth <= 767){
-  gsap.to(".court-center", {
+  gsap.to(".court-lineup", {
     x: () => {
       const element = document.querySelector(".court-lineup");
       const viewportWidth = window.innerWidth;
