@@ -290,7 +290,8 @@ ScrollTrigger.create({
   trigger: ".section_hero",
   start: "33% bottom",
   end: "38% bottom",
-  scrub: 0.3,
+  scrub: true,
+  // scrub: 0.3,
   toggleActions: "restart pause reverse pause", // Ensure it resets on scroll reverse
   onUpdate: (self) => {
     const p = self.progress;
@@ -306,7 +307,8 @@ ScrollTrigger.create({
   trigger: ".section_hero",
   start: "38% bottom",
   end: "43% bottom",
-  scrub: 0.3,
+  scrub: true,
+  // scrub: 0.3,
   toggleActions: "restart pause reverse pause", // Ensure it resets on scroll reverse
   onUpdate: (self) => {
     const p = self.progress;
@@ -553,9 +555,6 @@ if (window.innerWidth > 768) {
       end: "center center",
       scrub: true,
       //markers: true
-      onComplete:()=>{
-        document.querySelector(".cta-section").style.backgroundColor = "black"
-      }
     },
   });
 
