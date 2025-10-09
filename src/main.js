@@ -174,7 +174,7 @@ function resetOnScroll() {
   update();
   // gui.updateDisplay()
 }
-window.addEventListener("scroll", resetOnScroll);
+// window.addEventListener("scroll", resetOnScroll);
 
 
 // GSAP
