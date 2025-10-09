@@ -191,18 +191,18 @@ gsap.set(heroTitle, { opacity: 1, y: 0 });
 gsap.set(absTitle1, { opacity: 0, y: 20 }); // start 20px below, hidden
 gsap.set(absTitle2, { opacity: 0 });
 
-ScrollTrigger.create({
-  trigger: hero,
-  start: "top top",
-  end: "+=999999",
-  onUpdate: (self) => {
-    gsap.to(nav, {
-      yPercent: self.direction === 1 ? -100 : 0,
-      duration: 0.5,
-      ease: "power1.out",
-    });
-  },
-});
+// ScrollTrigger.create({
+//   trigger: hero,
+//   start: "top top",
+//   end: "+=999999",
+//   onUpdate: (self) => {
+//     gsap.to(nav, {
+//       yPercent: self.direction === 1 ? -100 : 0,
+//       duration: 0.5,
+//       ease: "power1.out",
+//     });
+//   },
+// });
 
 gsap.fromTo(
   ".scroll-prompt",
