@@ -499,50 +499,51 @@ ScrollTrigger.create({
 });
 
 /* |START| Horizontal Scroll*/
-let gsapMediaQ = gsap.matchMedia();
 
-// add a media query. When it matches, the associated function will run
-gsapMediaQ.add("(min-width: 768px)", () => {
-  gsap.to(".team_wrap", {
-    x: () => {
-      const element = document.querySelector(".team_wrap");
-      const viewportWidth = window.innerWidth;
-      const elementRect = element.getBoundingClientRect();
+let gsapMediaQ;
+
+if (typeof window !== "undefined" && typeof window.matchMedia === "function") {
+  gsapMediaQ = gsap.matchMedia();
   
-      // if (elementRect.width > viewportWidth) {
-          const offsetToMove = elementRect.right - viewportWidth;
-          return -(offsetToMove);
-      // }
-    },
-    ease: "none",
-    scrollTrigger: {
-      trigger: ".hori-scroll-wrap",
-      start: "top top",
-      end: "bottom bottom",
-      scrub: true,
-    },
+  gsapMediaQ.add("(min-width: 768px)", () => {
+    gsap.to(".team_wrap", {
+      x: () => {
+        const element = document.querySelector(".team_wrap");
+        const viewportWidth = window.innerWidth;
+        const elementRect = element.getBoundingClientRect();
+        const offsetToMove = elementRect.right - viewportWidth;
+        return -(offsetToMove);
+      },
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".hori-scroll-wrap",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: true,
+      },
+    });
   });
-});
-gsapMediaQ.add("(max-width: 767px)", () => {
-  gsap.to(".court-center", {
-    x: () => {
-      const element = document.querySelector(".court-lineup");
-      const viewportWidth = window.innerWidth;
-      const elementRect = element.getBoundingClientRect();
-      const offsetToMove = elementRect.right - viewportWidth;
-      return -(offsetToMove + 48);
-    },
-    ease: "none",
-    scrollTrigger: {
-      trigger: ".hori-scroll-wrap",
-      start: "top top",
-      end: "bottom bottom",
-      scrub: true,
-    },
-  });
-});
 
-/* |START| Horizontal Scroll*/
+  gsapMediaQ.add("(max-width: 767px)", () => {
+    gsap.to(".court-center", {
+      x: () => {
+        const element = document.querySelector(".court-lineup");
+        const viewportWidth = window.innerWidth;
+        const elementRect = element.getBoundingClientRect();
+        const offsetToMove = elementRect.right - viewportWidth;
+        return -(offsetToMove + 48);
+      },
+      ease: "none",
+      scrollTrigger: {
+        trigger: ".hori-scroll-wrap",
+        start: "top top",
+        end: "bottom bottom",
+        scrub: true,
+      },
+    });
+  });
+}
+/* |END| Horizontal Scroll*/
 
 
 if (window.innerWidth > 768) {
