@@ -284,62 +284,107 @@ gsap.to(".hero-img", {
   },
 });
 
-// ----------- Sequential fade + slide transitions -----------
-// 1. heroTitle fades up and out (33% → 38%)
-ScrollTrigger.create({
-  trigger: ".section_hero",
-  start: "33% bottom",
-  end: "38% bottom",
-  scrub: true,
-  // scrub: 0.3,
-  toggleActions: "restart pause reverse pause", // Ensure it resets on scroll reverse
-  onUpdate: (self) => {
-    const p = self.progress;
-    gsap.set(heroTitle, {
-      y: gsap.utils.interpolate(0, -20, p),
-      opacity: 1 - p,
-    });
-  },
-});
+// // ----------- Sequential fade + slide transitions -----------
+// // 1. heroTitle fades up and out (33% → 38%)
+// ScrollTrigger.create({
+//   trigger: ".section_hero",
+//   start: "33% bottom",
+//   end: "38% bottom",
+//   scrub: true,
+//   // scrub: 0.3,
+//   toggleActions: "restart pause reverse pause", // Ensure it resets on scroll reverse
+//   onUpdate: (self) => {
+//     const p = self.progress;
+//     gsap.set(heroTitle, {
+//       y: gsap.utils.interpolate(0, -20, p),
+//       opacity: 1 - p,
+//     });
+//   },
+// });
 
-// 2. absTitle1 fades in and moves up (38% → 43%)
-ScrollTrigger.create({ 
-  trigger: ".section_hero",
-  start: "38% bottom",
-  end: "43% bottom",
-  scrub: true,
-  // scrub: 0.3,
-  toggleActions: "restart pause reverse pause", // Ensure it resets on scroll reverse
-  onUpdate: (self) => {
-    const p = self.progress;
-    gsap.set(absTitle1, {
-      y: gsap.utils.interpolate(20, 0, p),
-      opacity: p,
-    });
-  },
-});
+// // 2. absTitle1 fades in and moves up (38% → 43%)
+// ScrollTrigger.create({ 
+//   trigger: ".section_hero",
+//   start: "38% bottom",
+//   end: "43% bottom",
+//   scrub: true,
+//   // scrub: 0.3,
+//   toggleActions: "restart pause reverse pause", // Ensure it resets on scroll reverse
+//   onUpdate: (self) => {
+//     const p = self.progress;
+//     gsap.set(absTitle1, {
+//       y: gsap.utils.interpolate(20, 0, p),
+//       opacity: p,
+//     });
+//   },
+// });
 
 
-// ----------- absTitle1 chars stagger fade starts after (43% → 66%) -----------
+// // ----------- absTitle1 chars stagger fade starts after (43% → 66%) -----------
 
-const splitAbsTitle1 = new SplitType(absTitle1, { types: "chars" });
-gsap.to(splitAbsTitle1.chars, {
-  duration: 0.5,
-  stagger: 0.05,
-  scrollTrigger: {
-    trigger: ".section_hero",
-    start: "43% bottom",
-    end: "80% bottom",
+// const splitAbsTitle1 = new SplitType(absTitle1, { types: "chars" });
+// gsap.to(splitAbsTitle1.chars, {
+//   duration: 0.5,
+//   stagger: 0.05,
+//   scrollTrigger: {
+//     trigger: ".section_hero",
+//     start: "43% bottom",
+//     end: "80% bottom",
+//     scrub: true,
+//     toggleActions: "play reverse play reverse",
+//     onUpdate: (self) => {
+//       const p = self.progress;
+//       splitAbsTitle1.chars.forEach((c, i) =>
+//         gsap.set(c, { opacity: p > i / splitAbsTitle1.chars.length ? 1 : 0.3 })
+//       );
+//     },
+//   },
+// });
+
+// Helper: Animate element with fade and slide on scroll
+function fadeSlide(trigger, start, end, element, fromY, toY, fromOpacity, toOpacity) {
+  ScrollTrigger.create({
+    trigger,
+    start,
+    end,
     scrub: true,
-    toggleActions: "play reverse play reverse",
+    toggleActions: "restart pause reverse pause",
     onUpdate: (self) => {
       const p = self.progress;
-      splitAbsTitle1.chars.forEach((c, i) =>
-        gsap.set(c, { opacity: p > i / splitAbsTitle1.chars.length ? 1 : 0.3 })
-      );
+      gsap.set(element, {
+        y: gsap.utils.interpolate(fromY, toY, p),
+        opacity: gsap.utils.interpolate(fromOpacity, toOpacity, p),
+      });
     },
+  });
+}
+
+// 1. heroTitle fades up and out (33% → 38%)
+fadeSlide(".section_hero", "33% bottom", "38% bottom", heroTitle, 0, -20, 1, 0);
+
+// 2. absTitle1 fades in and moves up (38% → 43%)
+fadeSlide(".section_hero", "38% bottom", "43% bottom", absTitle1, 20, 0, 0, 1);
+
+// 3. Stagger fade-in of absTitle1 chars (43% → 80%)
+const splitAbsTitle1 = new SplitType(absTitle1, { types: "chars" });
+
+ScrollTrigger.create({
+  trigger: ".section_hero",
+  start: "43% bottom",
+  end: "80% bottom",
+  scrub: true,
+  toggleActions: "play reverse play reverse",
+  onUpdate: (self) => {
+    const p = self.progress;
+    const total = splitAbsTitle1.chars.length;
+    splitAbsTitle1.chars.forEach((char, i) => {
+      gsap.set(char, {
+        opacity: p > i / total ? 1 : 0.3,
+      });
+    });
   },
 });
+
 
 
 const tl2 = gsap.timeline({
