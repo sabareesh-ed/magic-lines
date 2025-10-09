@@ -553,6 +553,9 @@ if (window.innerWidth > 768) {
       end: "center center",
       scrub: true,
       //markers: true
+      onComplete:()=>{
+        document.querySelector(".cta-section").style.backgroundColor = "black"
+      }
     },
   });
 
