@@ -16,6 +16,11 @@ export default defineConfig({
   build: {
     minify: true,
     manifest: true,
+    terserOptions: {
+      mangle: {
+        reserved: ['normalizeScroll'],  // Prevent normalizeScroll from being mangled
+      },
+    },
     rollupOptions: {
       // Multiple entry points
       input: {
