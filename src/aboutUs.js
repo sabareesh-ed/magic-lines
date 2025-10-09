@@ -185,4 +185,3 @@ function animate() {
 }
 animate();
 
-window.addEventListener("scroll", resetOnScroll);
