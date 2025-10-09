@@ -544,7 +544,7 @@ if(window.innerWidth <= 767){
 if (window.innerWidth > 768) {
   gsap.to(".cta-section-image", {
     height: "100vh",
-    width: "100vw",
+    width: "calc(100vw + 1px)",
     duration: 1.5,
     ease: "power2.inOut",
     scrollTrigger: {
