@@ -18,7 +18,8 @@ export default defineConfig({
     manifest: true,
     terserOptions: {
       mangle: {
-        reserved: ['normalizeScroll'],  // Prevent normalizeScroll from being mangled
+        reserved: ['normalizeScroll', 'ScrollTrigger', 'gsap'],  // Prevent normalizeScroll from being mangled
+        
       },
     },
     rollupOptions: {
