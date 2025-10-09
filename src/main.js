@@ -510,10 +510,10 @@ gsap.to(".team_wrap", {
     const viewportWidth = window.innerWidth;
     const elementRect = element.getBoundingClientRect();
 
-    if (elementRect.width > viewportWidth) {
+    // if (elementRect.width > viewportWidth) {
         const offsetToMove = elementRect.right - viewportWidth;
         return -(offsetToMove);
-    }
+    // }
   },
   ease: "none",
   scrollTrigger: {
