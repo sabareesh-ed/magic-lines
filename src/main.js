@@ -187,18 +187,16 @@ function charSpliTextUtility(el, scrollTriggerEl, triggerStart, triggerEnd){
     type: "chars",
     autoSplit: true,
     onSplit(self) {
-      // Create a ScrollTrigger for each element
-      ScrollTrigger.create({
-        trigger: scrollTriggerEl,
+      gsap.to(self.chars, {
+        opacity: 1,
+        duration: 1,
+        stagger: 0.05,
+        ease: "power2.out",
+        scrollTrigger: {
+          trigger: scrollTriggerEl,
         start: triggerStart,
         end: triggerEnd,
-        onEnter: () => {
-          gsap.to(self.chars, {
-            opacity: 1,
-            duration: 1,
-            stagger: 0.05,
-            ease: "power2.out"
-          });
+        scrub: true,
         }
       });
     }
