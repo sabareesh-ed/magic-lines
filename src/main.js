@@ -187,6 +187,11 @@ function charSpliTextUtility(el) {
     type: "words, chars",
     charsClass: "char",
     autoSplit: true,
+    onSplit(self) {
+      gsap.set(self.chars, {
+        opacity: 0.5,
+      })
+    }
   });
 }
 
@@ -224,7 +229,7 @@ function heroSectionAnimation(){
     }
   });
   absTitle1Tl.to(absTitle1, {
-    opacity: 0.5,
+    opacity: 1,
     y: 0,
     duration: 0.1,
   }).to(absTitle1.querySelectorAll(".char"), {
