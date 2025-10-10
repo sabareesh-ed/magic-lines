@@ -244,10 +244,11 @@ function heroSectionAnimation(){
   /*Fade out the absTitle1, then fade in the absTitle2*/
   const absTitle2Tl = gsap.timeline({
     scrollTrigger: {
-      trigger: hTrigger3,
+      trigger: hTrigger2,
+      endTrigger: hTrigger3,
       scrub: true,
-      start: "top bottom",  
-      end: "top 30%",
+      start: "top 20%",  
+      end: "top top",
     }
   });
   absTitle2Tl.to(absTitle1,{
