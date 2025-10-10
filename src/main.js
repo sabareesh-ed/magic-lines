@@ -219,6 +219,7 @@ function heroSectionAnimation(){
   });
   /*Fade out the heroTitle*/
   charSpliTextUtility(absTitle1);
+  charSpliTextUtility(absTitle2);
   /*Fade in the absTitle1*/
   const absTitle1Tl = gsap.timeline({
     scrollTrigger: {
@@ -239,6 +240,29 @@ function heroSectionAnimation(){
     ease: "power2.out",
   });
   /*Fade in the absTitle1*/
+
+  /*Fade out the absTitle1, then fade in the absTitle2*/
+  const absTitle2Tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: hTrigger3,
+      scrub: true,
+      start: "top bottom",  
+      end: "top top",
+    }
+  });
+  absTitle2Tl.to(absTitle1, {
+    opacity: 0,
+    duration: 0.1,
+  }).to(absTitle2, {
+    opacity: 1,
+    duration: 0.1,
+  }).to(absTitle2.querySelectorAll(".char"), {
+    opacity: 1,
+    duration: 1,
+    stagger: 0.05,
+    ease: "power2.out",
+  });
+  /*Fade out the absTitle1, then fade in the absTitle2*/
 
 }
 
