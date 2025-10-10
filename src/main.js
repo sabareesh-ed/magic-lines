@@ -182,28 +182,11 @@ window.addEventListener("scroll", resetOnScroll);
 
 gsap.registerPlugin(ScrollTrigger);
 
-function charSpliTextUtility(el, scrollTriggerEl, triggerStart, triggerEnd) {
+function charSpliTextUtility(el) {
   SplitText.create(el, {
     type: "words, chars",
+    charsClass: "char",
     autoSplit: true,
-    onSplit(self) {
-      // Immediately hide chars
-      // gsap.set(self.chars, { opacity: 0 });
-
-      // Then animate them
-      gsap.to(self.chars, {
-        opacity: 1,
-        duration: 1,
-        stagger: 0.05,
-        ease: "power2.out",
-        scrollTrigger: {
-          trigger: scrollTriggerEl,
-          start: triggerStart,
-          end: triggerEnd,
-          scrub: true,
-        }
-      });
-    }
   });
 }
 
@@ -230,20 +213,26 @@ function heroSectionAnimation(){
     }
   });
   /*Fade out the heroTitle*/
-
+  charSpliTextUtility(absTitle1);
   /*Fade in the absTitle1*/
-  gsap.to(absTitle1, {
-    opacity: 0.5,
-    y: 0,
-    duration: 0.1,
+  const absTitle1Tl = gsap.timeline({
     scrollTrigger: {
       trigger: hTrigger2,
       scrub: true,
       start: "top bottom",  
-      end: "top 95%",
+      end: "top top",
     }
   });
-  charSpliTextUtility(absTitle1, hTrigger2, "top 95%", "top top");
+  absTitle1Tl.to(absTitle1, {
+    opacity: 0.5,
+    y: 0,
+    duration: 0.1,
+  }).to(absTitle1.querySelectorAll(".char"), {
+    opacity: 1,
+    duration: 1,
+    stagger: 0.05,
+    ease: "power2.out",
+  });
   /*Fade in the absTitle1*/
 
 }
