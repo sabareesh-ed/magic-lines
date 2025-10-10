@@ -183,7 +183,7 @@ window.addEventListener("scroll", resetOnScroll);
 gsap.registerPlugin(ScrollTrigger);
 
 function charSpliTextUtility(el, scrollTriggerEl, triggerStart, triggerEnd){
-  SplitText.create("el", {
+  SplitText.create(el, {
     type: "chars",
     autoSplit: true,
     onSplit(self) {
