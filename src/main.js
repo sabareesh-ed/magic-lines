@@ -242,7 +242,7 @@ function heroSectionAnimation(){
   /*Fade in the absTitle1*/
 
   /*Fade out the absTitle1*/
-  gsap.to(absTitle2,{
+  gsap.to(absTitle1,{
     opacity: 0,
     duration: 0.5,
     scrollTrigger: {
