@@ -213,7 +213,7 @@ function heroSectionAnimation(){
     scrollTrigger: {
       trigger: hTrigger1,
       scrub: true,
-      start: "top 90%",  
+      start: "clamp(top 95%)",  
       end: "bottom bottom",
     }
   });
@@ -268,28 +268,6 @@ function heroSectionAnimation(){
 }
 
 heroSectionAnimation();
-// const heroTitle = document.getElementById("hero-title");
-// const absTitle1 = document.querySelector(".abs-title1");
-// const absTitle2 = document.querySelector(".abs-title2");
-// const nav = document.querySelector(".nav_fixed");
-// const hero = document.querySelector(".section_hero");
-
-// gsap.set(heroTitle, { opacity: 1, y: 0 });
-// gsap.set(absTitle1, { opacity: 0, y: 20 }); // start 20px below, hidden
-// gsap.set(absTitle2, { opacity: 0 });
-
-// ScrollTrigger.create({
-//   trigger: hero,
-//   start: "top top",
-//   end: "+=999999",
-//   onUpdate: (self) => {
-//     gsap.to(nav, {
-//       yPercent: self.direction === 1 ? -100 : 0,
-//       duration: 0.5,
-//       ease: "power1.out",
-//     });
-//   },
-// });
 
 //the scroll indicator at the bottom//
 gsap.fromTo(
@@ -666,7 +644,6 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
 //  MINDSET SECTION — Scroll-driven, single-accent, overlap-safe
 
 document.addEventListener("DOMContentLoaded", () => {
-  gsap.registerPlugin(ScrollTrigger);
 
   const mindsetItems = document.querySelectorAll(".mindset_item");
   const controlItems = document.querySelectorAll(".mindset_control-item");
