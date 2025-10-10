@@ -184,7 +184,7 @@ gsap.registerPlugin(ScrollTrigger);
 
 function charSpliTextUtility(el, scrollTriggerEl, triggerStart, triggerEnd){
   SplitText.create(el, {
-    type: "chars",
+    type: "words, chars",
     autoSplit: true,
     onSplit(self) {
       gsap.to(self.chars, {
