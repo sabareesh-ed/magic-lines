@@ -206,6 +206,20 @@ function heroSectionAnimation(){
   });
   /*Fade out the heroTitle*/
 
+  /*Fade in the absTitle1*/
+  gsap.to(absTitle1, {
+    opacity: 1,
+    y: 0,
+    duration: 0.1,
+    scrollTrigger: {
+      trigger: hTrigger2,
+      scrub: true,
+      start: "top bottom",  
+      end: "top 90%",
+    }
+  });
+  /*Fade in the absTitle1*/
+
 }
 
 heroSectionAnimation();
