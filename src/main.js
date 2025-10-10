@@ -182,26 +182,32 @@ window.addEventListener("scroll", resetOnScroll);
 
 gsap.registerPlugin(ScrollTrigger);
 
-function charSpliTextUtility(el, scrollTriggerEl, triggerStart, triggerEnd){
+function charSpliTextUtility(el, scrollTriggerEl, triggerStart, triggerEnd) {
   SplitText.create(el, {
     type: "words, chars",
     autoSplit: true,
     onSplit(self) {
+      // Immediately hide chars
+      gsap.set(self.chars, { opacity: 0 });
+
+      // Then animate them
       gsap.to(self.chars, {
         opacity: 1,
+        y: 0,
         duration: 1,
         stagger: 0.05,
         ease: "power2.out",
         scrollTrigger: {
           trigger: scrollTriggerEl,
-        start: triggerStart,
-        end: triggerEnd,
-        scrub: true,
+          start: triggerStart,
+          end: triggerEnd,
+          scrub: true,
         }
       });
     }
   });
 }
+
 
 function heroSectionAnimation(){
   /*Triggers*/
