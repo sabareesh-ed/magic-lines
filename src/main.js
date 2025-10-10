@@ -339,7 +339,7 @@ gsap.fromTo(
 //   },
 // });
 
-gsap.to(".hero-img", {
+gsap.to(".hero-img-wrap", {
   y: "-100%",
   duration: 1,
   scrollTrigger: {
