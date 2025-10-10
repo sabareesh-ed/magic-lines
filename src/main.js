@@ -7,7 +7,7 @@ import * as THREE from "three";
 import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader.js";
 import { RGBELoader } from "three/examples/jsm/loaders/RGBELoader.js";
 
-gsap.registerPlugin(ScrollTrigger);
+gsap.registerPlugin(ScrollTrigger, SplitText);
 ScrollTrigger.normalizeScroll(true);
 const canvas = document.querySelector(".webgl");
 
@@ -181,6 +181,28 @@ window.addEventListener("scroll", resetOnScroll);
 
 gsap.registerPlugin(ScrollTrigger);
 
+function charSpliTextUtility(el, scrollTriggerEl, triggerStart, triggerEnd){
+  SplitText.create("el", {
+    type: "chars",
+    autoSplit: true,
+    onSplit(self) {
+      // Create a ScrollTrigger for each element
+      ScrollTrigger.create({
+        trigger: scrollTriggerEl,
+        start: triggerStart,
+        end: triggerEnd,
+        onEnter: () => {
+          gsap.to(self.chars, {
+            opacity: 1,
+            duration: 1,
+            stagger: 0.05,
+            ease: "power2.out"
+          });
+        }
+      });
+    }
+  });
+}
 
 function heroSectionAnimation(){
   /*Triggers*/
@@ -208,16 +230,17 @@ function heroSectionAnimation(){
 
   /*Fade in the absTitle1*/
   gsap.to(absTitle1, {
-    opacity: 1,
+    opacity: 0.5,
     y: 0,
     duration: 0.1,
     scrollTrigger: {
       trigger: hTrigger2,
       scrub: true,
       start: "top bottom",  
-      end: "top 90%",
+      end: "top 95%",
     }
   });
+  charSpliTextUtility(absTitle1, hTrigger2, "top 95%", "top top");
   /*Fade in the absTitle1*/
 
 }
