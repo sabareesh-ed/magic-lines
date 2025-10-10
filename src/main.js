@@ -189,7 +189,7 @@ function charSpliTextUtility(el) {
     autoSplit: true,
     onSplit(self) {
       gsap.set(self.chars, {
-        opacity: 0.5,
+        opacity: 0.3,
       })
     }
   });
@@ -226,7 +226,7 @@ function heroSectionAnimation(){
       trigger: hTrigger2,
       scrub: true,
       start: "top bottom",  
-      end: "top top",
+      end: "top 30%",
     }
   });
   absTitle1Tl.to(absTitle1, {
@@ -241,19 +241,29 @@ function heroSectionAnimation(){
   });
   /*Fade in the absTitle1*/
 
-  /*Fade out the absTitle1, then fade in the absTitle2*/
-  const absTitle2Tl = gsap.timeline({
+  /*Fade out the absTitle1*/
+  gsap.to(absTitle2,{
+    opacity: 0,
+    duration: 0.5,
     scrollTrigger: {
       trigger: hTrigger3,
       scrub: true,
       start: "top bottom",  
-      end: "top top",
+      end: "top 90%",
     }
   });
-  absTitle2Tl.to(absTitle1, {
-    opacity: 0,
-    duration: 0.1,
-  }).to(absTitle2, {
+  /*Fade out the absTitle1*/
+
+  /*, then fade in the absTitle2*/
+  const absTitle2Tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: hTrigger3,
+      scrub: true,
+      start: "top 90%",  
+      end: "top 30%",
+    }
+  });
+  absTitle2Tl.to(absTitle2, {
     opacity: 1,
     duration: 0.1,
   }).to(absTitle2.querySelectorAll(".char"), {
