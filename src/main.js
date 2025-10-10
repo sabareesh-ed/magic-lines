@@ -213,7 +213,7 @@ function heroSectionAnimation(){
     scrollTrigger: {
       trigger: hTrigger1,
       scrub: true,
-      start: "top bottom",  
+      start: "top 90%",  
       end: "bottom bottom",
     }
   });
