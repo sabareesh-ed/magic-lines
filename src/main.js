@@ -238,6 +238,7 @@ function heroSectionAnimation(){
     duration: 1,
     stagger: 0.05,
     ease: "power2.out",
+    delay: 0.1,
   });
   /*Fade in the absTitle1*/
 
@@ -262,6 +263,7 @@ function heroSectionAnimation(){
     duration: 1,
     stagger: 0.05,
     ease: "power2.out",
+    delay: 0.1,
   });
   /*Fade out the absTitle1, then fade in the absTitle2*/
 
