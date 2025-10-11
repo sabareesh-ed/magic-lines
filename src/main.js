@@ -187,11 +187,11 @@ function charSpliTextUtility(el) {
     type: "words, chars",
     charsClass: "char",
     autoSplit: true,
-    onSplit(self) {
-      gsap.set(self.chars, {
-        opacity: 0.3,
-      })
-    }
+    // onSplit(self) {
+    //   // gsap.set(self.chars, {
+    //   //   opacity: 0.3,
+    //   // })
+    // }
   });
 }
 
