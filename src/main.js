@@ -182,93 +182,93 @@ window.addEventListener("scroll", resetOnScroll);
 
 gsap.registerPlugin(ScrollTrigger);
 
-function charSpliTextUtility(el) {
-  SplitText.create(el, {
-    type: "words, chars",
-    charsClass: "char",
-    autoSplit: true,
-    // onSplit(self) {
-    //   // gsap.set(self.chars, {
-    //   //   opacity: 0.3,
-    //   // })
-    // }
-  });
-}
+// function charSpliTextUtility(el) {
+//   SplitText.create(el, {
+//     type: "words, chars",
+//     charsClass: "char",
+//     autoSplit: true,
+//     // onSplit(self) {
+//     //   // gsap.set(self.chars, {
+//     //   //   opacity: 0.3,
+//     //   // })
+//     // }
+//   });
+// }
 
-function heroSectionAnimation(){
-  /*Triggers*/
-  const hTrigger1 = document.querySelector("[h-text-trigger-1]");
-  const hTrigger2 = document.querySelector("[h-text-trigger-2]");
-  const hTrigger3 = document.querySelector("[h-text-trigger-3]");
-  /*Triggers*/
-  /*Elements*/
-  const heroTitle = document.getElementById("hero-title");
-  const absTitle1 = document.querySelector(".abs-title1");
-  const absTitle2 = document.querySelector(".abs-title2");
-  /*Elements*/
-  /*Fade out the heroTitle*/
-  gsap.to(heroTitle,{
-    opacity: 0,
-    duration: 0.5,
-    scrollTrigger: {
-      trigger: hTrigger1,
-      scrub: true,
-      start: "clamp(top 95%)",  
-      end: "bottom bottom",
-    }
-  });
-  /*Fade out the heroTitle*/
-  charSpliTextUtility(absTitle1);
-  charSpliTextUtility(absTitle2);
-  /*Fade in the absTitle1*/
-  const absTitle1Tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: hTrigger2,
-      scrub: true,
-      start: "top bottom",  
-      end: "top 30%",
-    }
-  });
-  absTitle1Tl.to(absTitle1, {
-    opacity: 1,
-    y: 0,
-    duration: 0.1,
-  }).to(absTitle1.querySelectorAll(".char"), {
-    opacity: 1,
-    duration: 1,
-    stagger: 0.05,
-    ease: "power2.out",
-    delay: 0.1,
-  },"<");
-  /*Fade in the absTitle1*/
+// function heroSectionAnimation(){
+//   /*Triggers*/
+//   const hTrigger1 = document.querySelector("[h-text-trigger-1]");
+//   const hTrigger2 = document.querySelector("[h-text-trigger-2]");
+//   const hTrigger3 = document.querySelector("[h-text-trigger-3]");
+//   /*Triggers*/
+//   /*Elements*/
+//   const heroTitle = document.getElementById("hero-title");
+//   const absTitle1 = document.querySelector(".abs-title1");
+//   const absTitle2 = document.querySelector(".abs-title2");
+//   /*Elements*/
+//   /*Fade out the heroTitle*/
+//   gsap.to(heroTitle,{
+//     opacity: 0,
+//     duration: 0.5,
+//     scrollTrigger: {
+//       trigger: hTrigger1,
+//       scrub: true,
+//       start: "clamp(top 95%)",  
+//       end: "bottom bottom",
+//     }
+//   });
+//   /*Fade out the heroTitle*/
+//   charSpliTextUtility(absTitle1);
+//   charSpliTextUtility(absTitle2);
+//   /*Fade in the absTitle1*/
+//   const absTitle1Tl = gsap.timeline({
+//     scrollTrigger: {
+//       trigger: hTrigger2,
+//       scrub: true,
+//       start: "top bottom",  
+//       end: "top 30%",
+//     }
+//   });
+//   absTitle1Tl.to(absTitle1, {
+//     opacity: 1,
+//     y: 0,
+//     duration: 0.1,
+//   }).to(absTitle1.querySelectorAll(".char"), {
+//     opacity: 1,
+//     duration: 1,
+//     stagger: 0.05,
+//     ease: "power2.out",
+//     delay: 0.1,
+//   },"<");
+//   /*Fade in the absTitle1*/
 
-  /*Fade out the absTitle1, then fade in the absTitle2*/
-  const absTitle2Tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: hTrigger2,
-      endTrigger: hTrigger3,
-      scrub: true,
-      start: "top 20%",  
-      end: "top top",
-    }
-  });
-  absTitle2Tl.to(absTitle1,{
-    opacity: 0,
-    duration: 0.5,
-  }).to(absTitle2, {
-    opacity: 1,
-    duration: 0.1,
-  }).to(absTitle2.querySelectorAll(".char"), {
-    opacity: 1,
-    duration: 1,
-    stagger: 0.05,
-    ease: "power2.out",
-    delay: 0.1,
-  },"<");
-  /*Fade out the absTitle1, then fade in the absTitle2*/
-}
+//   /*Fade out the absTitle1, then fade in the absTitle2*/
+//   const absTitle2Tl = gsap.timeline({
+//     scrollTrigger: {
+//       trigger: hTrigger2,
+//       endTrigger: hTrigger3,
+//       scrub: true,
+//       start: "top 20%",  
+//       end: "top top",
+//     }
+//   });
+//   absTitle2Tl.to(absTitle1,{
+//     opacity: 0,
+//     duration: 0.5,
+//   }).to(absTitle2, {
+//     opacity: 1,
+//     duration: 0.1,
+//   }).to(absTitle2.querySelectorAll(".char"), {
+//     opacity: 1,
+//     duration: 1,
+//     stagger: 0.05,
+//     ease: "power2.out",
+//     delay: 0.1,
+//   },"<");
+//   /*Fade out the absTitle1, then fade in the absTitle2*/
+// }
 
-heroSectionAnimation();
+// heroSectionAnimation();
 
 //the scroll indicator at the bottom//
 gsap.fromTo(
