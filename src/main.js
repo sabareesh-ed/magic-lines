@@ -208,7 +208,7 @@ function heroSectionAnimation(){
   const mainHero = document.querySelector(".main-hero");
 
   charSpliTextUtility(mainHero);
-  charSpliTextUtility(absTitle1);
+  // charSpliTextUtility(absTitle1);
   charSpliTextUtility(absTitle2);
   charSpliTextUtility(absTitle3);
 
@@ -223,7 +223,7 @@ function heroSectionAnimation(){
       start: "clamp(top 95%)",  
       end: "bottom bottom",
     }
-  });
+  });  //make abs1 disappear
   /*Fade out the absTitle1*/
 
   /*Fade in the absTitle2*/
