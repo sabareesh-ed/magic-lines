@@ -575,7 +575,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
         duration: 0.1,
       },"<")
       .to(sectionMindset, {
-        color: mindsets[0].bg,
+        backgroundColor: mindsets[0].bg,
         duration: 0.1,
       },"<")
       
@@ -621,7 +621,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
         duration: 0.1,
       },"<")
       .to(sectionMindset, {
-        color: mindsets[1].bg,
+        backgroundColor: mindsets[1].bg,
         duration: 0.1,
       },"<")
 
@@ -662,11 +662,11 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
         width: "100%",
       },"<")
       .to(bgAbsolute, {
-        color: mindsets[1].accent,
+        color: mindsets[2].accent,
         duration: 0.1,
       },"<")
       .to(sectionMindset, {
-        color: mindsets[2].bg,
+        backgroundColor: mindsets[2].bg,
         duration: 0.1,
       },"<")
       /*Fade in the absTitle2*/
