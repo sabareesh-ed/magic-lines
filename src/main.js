@@ -565,6 +565,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
         duration: 0,
       },"<")
       .to(controlItems[0], {
+        opacity: 1,
         color: mindsets[0].text,
         duration: 0,
       },"<")
@@ -587,9 +588,14 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
         background: mindsets[1].accent,
         duration: 0,
       },"<")
+      .to(controlItems[0], {
+        opacity: 0.5,
+        duration: 0.1,
+      },"<")
       .to(controlItems[1], {
+        opacity: 0,
         color: mindsets[1].text,
-        duration: 0,
+        duration: 0.1,
       },"<")
       .to(mindsetItems[1], {
         opacity: 1,
@@ -615,9 +621,14 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
         background: mindsets[2].accent,
         duration: 0,
       },"<")
+      .to(controlItems[1], {
+        opacity: 0.5,
+        duration: 0.1,
+      },"<")
       .to(controlItems[2], {
+        opacity: 1,
         color: mindsets[2].text,
-        duration: 0,
+        duration: 0.1,
       },"<")
       .to(mindsetItems[2], {
         opacity: 1,
