@@ -562,11 +562,11 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       })
       .to(progressBars[0], {
         background: mindsets[0].accent,
-        duration: 0.1,
+        duration: 0,
       },"<")
       .to(controlItems[0], {
         color: mindsets[0].text,
-        duration: 0.1,
+        duration: 0,
       },"<")
       
       
@@ -581,19 +581,19 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       });
       mindsetTl2.to(mindsetItems[0], {
         opacity: 0,
-        duration: 0.1,
+        duration: 0,
       })
       .to(progressBars[1], {
         background: mindsets[1].accent,
-        duration: 0.1,
+        duration: 0,
       },"<")
       .to(controlItems[1], {
         color: mindsets[1].text,
-        duration: 0.1,
+        duration: 0,
       },"<")
       .to(mindsetItems[1], {
         opacity: 1,
-        duration: 0.1,
+        duration: 0,
       },"<")
       .to(progressBars[1], {
         width: "100%",
@@ -609,19 +609,19 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       });
       mindsetTl3.to(mindsetItems[1], {
         opacity: 0,
-        duration: 0.1,
+        duration: 0,
       })
       .to(progressBars[2], {
         background: mindsets[2].accent,
-        duration: 0.1,
+        duration: 0,
       },"<")
       .to(controlItems[2], {
         color: mindsets[2].text,
-        duration: 0.1,
+        duration: 0,
       },"<")
       .to(mindsetItems[2], {
         opacity: 1,
-        duration: 0.1,
+        duration: 0,
       },"<")
       .to(progressBars[2], {
         width: "100%",
