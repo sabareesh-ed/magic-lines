@@ -208,6 +208,7 @@ function heroSectionAnimation(){
   const mainHero = document.querySelector(".main-hero");
 
   charSpliTextUtility(mainHero);
+  charSpliTextUtility(absTitle1);
   charSpliTextUtility(absTitle2);
   charSpliTextUtility(absTitle3);
 
