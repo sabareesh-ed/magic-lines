@@ -549,18 +549,6 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       const mTrigger2 = document.querySelector("[m-trigger-2]");
       const mTrigger3 = document.querySelector("[m-trigger-3]");
 
-
-      // gsap.to(mindsetItems[0],{
-      //   opacity: 0,
-      //   duration: 0.5,
-      //   scrollTrigger: {
-      //     trigger: mTrigger1,
-      //     scrub: true,
-      //     start: "clamp(top bottom)",  
-      //     end: "bottom bottom",
-      //   }
-      // }); 
-
       const mindsetTl1 = gsap.timeline({
         scrollTrigger: {
           trigger: mTrigger1,
@@ -571,7 +559,12 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       });
       mindsetTl1.to(progressBars[0], {
         width: "100%",
-      });
+      })
+      .to(progressBars[0], {
+        background: mindsets[0].accent,
+        duration: 0.1,
+      },"<")
+      
 
       const mindsetTl2 = gsap.timeline({
         scrollTrigger: {
@@ -585,6 +578,10 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
         opacity: 0,
         duration: 0.1,
       })
+      .to(progressBars[1], {
+        background: mindsets[1].accent,
+        duration: 0.1,
+      },"<")
       .to(mindsetItems[1], {
         opacity: 1,
         duration: 0.1,
@@ -605,6 +602,10 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
         opacity: 0,
         duration: 0.1,
       })
+      .to(progressBars[2], {
+        background: mindsets[2].accent,
+        duration: 0.1,
+      },"<")
       .to(mindsetItems[2], {
         opacity: 1,
         duration: 0.1,
