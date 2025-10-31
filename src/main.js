@@ -179,7 +179,6 @@ window.addEventListener("scroll", resetOnScroll);
 
 
 // GSAP
-
 gsap.registerPlugin(ScrollTrigger);
 
 function charSpliTextUtility(el) {
@@ -200,14 +199,17 @@ function heroSectionAnimation(){
   const hTrigger1 = document.querySelector("[h-text-trigger-1]");
   const hTrigger2 = document.querySelector("[h-text-trigger-2]");
   const hTrigger3 = document.querySelector("[h-text-trigger-3]");
+  const hTrigger4 = document.querySelector("[h-text-trigger-4]");
   /*Triggers*/
   /*Elements*/
-  const heroTitle = document.getElementById("hero-title");
+  const mainHero = document.querySelector(".main-hero");
   const absTitle1 = document.querySelector(".abs-title1");
   const absTitle2 = document.querySelector(".abs-title2");
+  const absTitle3 = document.querySelector(".abs-title3");
+
   /*Elements*/
   /*Fade out the heroTitle*/
-  gsap.to(heroTitle,{
+  gsap.to(absTitle1,{
     opacity: 0,
     duration: 0.5,
     scrollTrigger: {
@@ -218,8 +220,9 @@ function heroSectionAnimation(){
     }
   });
   /*Fade out the heroTitle*/
-  charSpliTextUtility(absTitle1);
+  charSpliTextUtility(mainHero);
   charSpliTextUtility(absTitle2);
+  charSpliTextUtility(absTitle3);
   /*Fade in the absTitle1*/
   const absTitle1Tl = gsap.timeline({
     scrollTrigger: {
@@ -241,7 +244,6 @@ function heroSectionAnimation(){
     delay: 0.1,
   },"<");
   /*Fade in the absTitle1*/
-
   /*Fade out the absTitle1, then fade in the absTitle2*/
   const absTitle2Tl = gsap.timeline({
     scrollTrigger: {
@@ -266,6 +268,31 @@ function heroSectionAnimation(){
     delay: 0.1,
   },"<");
   /*Fade out the absTitle1, then fade in the absTitle2*/
+
+  /*Fade out the absTitle2, then fade in the absTitle3*/
+  const absTitle3Tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: hTrigger3,
+      endTrigger: hTrigger4,
+      scrub: true,
+      start: "top 20%",  
+      end: "top top",
+    }
+  });
+  absTitle3Tl.to(absTitle2,{
+    opacity: 0,
+    duration: 0.5,
+  }).to(absTitle3, {
+    opacity: 1,
+    duration: 0.1,
+  }).to(absTitle3.querySelectorAll(".char"), {
+    opacity: 1,
+    duration: 1,
+    stagger: 0.05,
+    ease: "power2.out",
+    delay: 0.1,
+  },"<");
+  /*Fade out the absTitle2, then fade in the absTitle3*/
 }
 
 heroSectionAnimation();
