@@ -593,7 +593,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
         duration: 0.1,
       },"<")
       .to(controlItems[1], {
-        opacity: 0,
+        opacity: 1,
         color: mindsets[1].text,
         duration: 0.1,
       },"<")
