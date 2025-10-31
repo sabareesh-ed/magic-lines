@@ -529,7 +529,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
 
 //  MINDSET SECTION — Scroll-driven, single-accent, overlap-safe
 
-document.addEventListener("DOMContentLoaded", () => {
+// document.addEventListener("DOMContentLoaded", () => {
     function mindsetAnimate(){
       console.log("mindset")
       const mindsets = [
@@ -618,7 +618,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
     mindsetAnimate();
-});
+// });
 // document.addEventListener("DOMContentLoaded", () => {
 
 //   const mindsetItems = document.querySelectorAll(".mindset_item");
