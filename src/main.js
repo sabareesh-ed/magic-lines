@@ -541,9 +541,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       const bgAbsolute = document.querySelector(".bg-absolute.mindset"); // the lines
       const mindsetItems = document.querySelectorAll(".mindset_item"); 
       const controlItems = document.querySelectorAll(".mindset_control-item");
-      const progressBars = Array.from(controlItems).map((el) =>
-        el.querySelector(".progress-bar")
-      );
+      const progressBars = document.querySelectorAll(".mindset_control-item .progress-bar");
   
       const mTrigger1 = document.querySelector("[m-trigger-1]");
       const mTrigger2 = document.querySelector("[m-trigger-2]");
@@ -584,7 +582,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
         opacity: 0,
         duration: 0.1,
       })
-      .to(progressBars[1], {
+      .to(progressBars, {
         background: mindsets[1].accent,
         duration: 0,
       },"<")
@@ -617,7 +615,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
         opacity: 0,
         duration: 0.1,
       })
-      .to(progressBars[2], {
+      .to(progressBars, {
         background: mindsets[2].accent,
         duration: 0,
       },"<")
