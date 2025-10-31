@@ -666,7 +666,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
         duration: 0.1,
       },"<")
       .to(sectionMindset, {
-        color: mindsets[1].bg,
+        color: mindsets[2].bg,
         duration: 0.1,
       },"<")
       /*Fade in the absTitle2*/
