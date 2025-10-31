@@ -235,11 +235,11 @@ function heroSectionAnimation(){
       end: "top 30%",
     }
   });
-  absTitle1Tl.to(absTitle1, {
+  absTitle1Tl.to(absTitle2, {
     opacity: 1,
     y: 0,
     duration: 0.1,
-  }).to(absTitle1.querySelectorAll(".char"), {
+  }).to(absTitle2.querySelectorAll(".char"), {
     opacity: 1,
     duration: 1,
     stagger: 0.05,
@@ -258,13 +258,13 @@ function heroSectionAnimation(){
       end: "top top",
     }
   });
-  absTitle2Tl.to(absTitle1,{
+  absTitle2Tl.to(absTitle2,{
     opacity: 0,
     duration: 0.5,
-  }).to(absTitle2, {
+  }).to(absTitle3, {
     opacity: 1,
     duration: 0.1,
-  }).to(absTitle2.querySelectorAll(".char"), {
+  }).to(absTitle3.querySelectorAll(".char"), {
     opacity: 1,
     duration: 1,
     stagger: 0.05,
@@ -283,7 +283,7 @@ function heroSectionAnimation(){
       end: "top top",
     }
   });
-  absTitle3Tl.to(absTitle2,{
+  absTitle3Tl.to(absTitle3,{
     opacity: 0,
     duration: 0.5,
   }).to(mainHero, {
