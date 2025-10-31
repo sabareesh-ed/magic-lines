@@ -564,8 +564,11 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       },"<")
       .to(controlItems[0], {
         opacity: 1,
+        duration: 0.1,
+      },"<")
+      .to(controlItems, {
         color: mindsets[0].text,
-        duration: 0,
+        duration: 0.1,
       },"<")
       
       
@@ -592,6 +595,9 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       },"<")
       .to(controlItems[1], {
         opacity: 1,
+        duration: 0.1,
+      },"<")
+      .to(controlItems, {
         color: mindsets[1].text,
         duration: 0.1,
       },"<")
@@ -625,6 +631,10 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       },"<")
       .to(controlItems[2], {
         opacity: 1,
+        color: mindsets[2].text,
+        duration: 0.1,
+      },"<")
+      .to(controlItems, {
         color: mindsets[2].text,
         duration: 0.1,
       },"<")
