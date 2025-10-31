@@ -558,7 +558,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       mindsetTl1.to(progressBars[0], {
         width: "100%",
       })
-      .to(progressBars[0], {
+      .to(progressBars, {
         background: mindsets[0].accent,
         duration: 0,
       },"<")
