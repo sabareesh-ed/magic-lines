@@ -574,6 +574,10 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
         color: mindsets[0].accent,
         duration: 0.1,
       },"<")
+      .to(sectionMindset, {
+        color: mindsets[0].bg,
+        duration: 0.1,
+      },"<")
       
       
 
@@ -616,6 +620,10 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
         color: mindsets[1].accent,
         duration: 0.1,
       },"<")
+      .to(sectionMindset, {
+        color: mindsets[1].bg,
+        duration: 0.1,
+      },"<")
 
       const mindsetTl3 = gsap.timeline({
         scrollTrigger: {
@@ -655,6 +663,10 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       },"<")
       .to(bgAbsolute, {
         color: mindsets[1].accent,
+        duration: 0.1,
+      },"<")
+      .to(sectionMindset, {
+        color: mindsets[1].bg,
         duration: 0.1,
       },"<")
       /*Fade in the absTitle2*/
