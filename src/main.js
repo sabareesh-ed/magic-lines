@@ -186,11 +186,6 @@ function charSpliTextUtility(el) {
     type: "words, chars",
     charsClass: "char",
     autoSplit: true,
-    // onSplit(self) {
-    //   // gsap.set(self.chars, {
-    //   //   opacity: 0.3,
-    //   // })
-    // }
   });
 }
 
@@ -320,57 +315,6 @@ gsap.fromTo(
 );
 //the scroll indicator at the bottom//
 
-// const splitHeroTitle = heroTitle
-//   ? new SplitType(heroTitle, { types: "chars" })
-//   : null;
-// if (splitHeroTitle) {
-//   gsap.to(splitHeroTitle.chars, {
-//     duration: 0.5,
-//     stagger: 0.05,
-//     scrollTrigger: {
-//       trigger: ".section_hero",
-//       start: "top-=90% top",
-//       end: "33% bottom",
-//       scrub: true,
-//       toggleActions: "play none none reverse",
-//       // onUpdate: (self) => {
-//       //   const p = self.progress;
-//       //   splitHeroTitle.chars.forEach((c, i) =>
-//       //     gsap.set(c, {
-//       //       opacity: p > i / splitHeroTitle.chars.length ? 1 : 1,
-//       //     })
-//       //   );
-//       // },
-//     },
-//   });
-// }
-
-// [".section_hero", ".section_hero .abs-lines"].forEach((sel, i) => {
-//   gsap.to(sel, {
-//     ...(i === 0 ? { backgroundColor: "#0D1434" } : { borderColor: "#919191" }),
-//     duration: 0.5,
-//     ease: "power2.out",
-//     scrollTrigger: {
-//       trigger: ".section_hero",
-//       start: "55% bottom",
-//       end: "55% bottom",
-//       toggleActions: "play none none reverse",
-//     },
-//   });
-// });
-
-// gsap.to([heroTitle, absTitle1, absTitle2], {
-//   color: "white",
-//   duration: 0.5,
-//   ease: "power2.out",
-//   scrollTrigger: {
-//     trigger: ".section_hero",
-//     start: "55% bottom",
-//     end: "55% bottom",
-//     toggleActions: "play none none reverse",
-//   },
-// });
-
 gsap.to(".hero-img-wrap", {
   y: "-100%",
   duration: 1,
@@ -382,96 +326,6 @@ gsap.to(".hero-img-wrap", {
     toggleActions: "play none none reverse",
   },
 });
-
-// ----------- Sequential fade + slide transitions -----------
-// 1. heroTitle fades up and out (33% → 38%)
-// ScrollTrigger.create({
-//   trigger: ".section_hero",
-//   start: "33% bottom",
-//   end: "38% bottom",
-//   scrub: true,
-//   // scrub: 0.3,
-//   toggleActions: "restart pause reverse pause", // Ensure it resets on scroll reverse
-//   onUpdate: (self) => {
-//     const p = self.progress;
-//     gsap.set(heroTitle, {
-//       y: gsap.utils.interpolate(0, -20, p),
-//       opacity: 1 - p,
-//     });
-//   },
-// });
-
-// 2. absTitle1 fades in and moves up (38% → 43%)
-// ScrollTrigger.create({ 
-//   trigger: ".section_hero",
-//   start: "38% bottom",
-//   end: "43% bottom",
-//   scrub: true,
-//   // scrub: 0.3,
-//   toggleActions: "restart pause reverse pause", // Ensure it resets on scroll reverse
-//   onUpdate: (self) => {
-//     const p = self.progress;
-//     gsap.set(absTitle1, {
-//       y: gsap.utils.interpolate(20, 0, p),
-//       opacity: p,
-//     });
-//   },
-// });
-
-
-// ----------- absTitle1 chars stagger fade starts after (43% → 66%) -----------
-
-// const splitAbsTitle1 = new SplitType(absTitle1, { types: "chars" });
-// gsap.to(splitAbsTitle1.chars, {
-//   duration: 0.5,
-//   stagger: 0.05,
-//   scrollTrigger: {
-//     trigger: ".section_hero",
-//     start: "43% bottom",
-//     end: "80% bottom",
-//     scrub: true,
-//     toggleActions: "play reverse play reverse",
-//     onUpdate: (self) => {
-//       const p = self.progress;
-//       splitAbsTitle1.chars.forEach((c, i) =>
-//         gsap.set(c, { opacity: p > i / splitAbsTitle1.chars.length ? 1 : 0.3 })
-//       );
-//     },
-//   },
-// });
-
-
-// const tl2 = gsap.timeline({
-//   scrollTrigger: {
-//     trigger: ".section_hero",
-//     start: "80% bottom",
-//     end: "100% top",
-//     scrub: false,
-//     toggleActions: "play none none reverse",
-//   },
-//   defaults: { duration: 0.2 },
-// });
-
-// tl2.to(absTitle1, { opacity: 0 }).to(absTitle2, { opacity: 1 }, 0);
-
-// const splitAbsTitle2 = new SplitType(absTitle2, { types: "chars" });
-// gsap.to(splitAbsTitle2.chars, {
-//   duration: 0.5,
-//   stagger: 0.05,
-//   scrollTrigger: {
-//     trigger: ".section_hero",
-//     start: "80% bottom",
-//     end: "100% bottom",
-//     scrub: true,
-//     toggleActions: "play reverse play reverse",
-//     onUpdate: (self) => {
-//       const p = self.progress;
-//       splitAbsTitle2.chars.forEach((c, i) =>
-//         gsap.set(c, { opacity: p > i / splitAbsTitle2.chars.length ? 1 : 0.3 })
-//       );
-//     },
-//   },
-// });
 
 
 
@@ -676,108 +530,197 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
 //  MINDSET SECTION — Scroll-driven, single-accent, overlap-safe
 
 document.addEventListener("DOMContentLoaded", () => {
+    function mindsetAnimate(){
+      const mindsets = [
+        { bg: "#273570", text: "white", accent: "white" },
+        { bg: "#03FF86", text: "black", accent: "black" },
+        { bg: "black", text: "#03FF86", accent: "#03FF86" },
+      ];
+      const sectionMindset = document.querySelector(".section_mindset"); //for the bg color
+      const bgAbsolute = document.querySelector(".bg-absolute.mindset"); // the lines
+      const mindsetItems = document.querySelectorAll(".mindset_item"); 
+      const controlItems = document.querySelectorAll(".mindset_control-item");
+      const progressBars = Array.from(controlItems).map((el) =>
+        el.querySelector(".progress-bar")
+      );
+  
+      const mTrigger1 = document.querySelector("[m-trigger-1]");
+      const mTrigger2 = document.querySelector("[m-trigger-2]");
+      const mTrigger3 = document.querySelector("[m-trigger-3]");
 
-  const mindsetItems = document.querySelectorAll(".mindset_item");
-  const controlItems = document.querySelectorAll(".mindset_control-item");
-  const progressBars = Array.from(controlItems).map((el) =>
-    el.querySelector(".progress-bar")
-  );
-  const sectionMindset = document.querySelector(".section_mindset");
-  const bgAbsolute = document.querySelector(".bg-absolute.mindset");
 
-  const mindsets = [
-    { bg: "#273570", text: "white", accent: "white" },
-    { bg: "#03FF86", text: "black", accent: "black" },
-    { bg: "black", text: "#03FF86", accent: "#03FF86" },
-  ];
+      // gsap.to(mindsetItems[0],{
+      //   opacity: 0,
+      //   duration: 0.5,
+      //   scrollTrigger: {
+      //     trigger: mTrigger1,
+      //     scrub: true,
+      //     start: "clamp(top bottom)",  
+      //     end: "bottom bottom",
+      //   }
+      // }); 
 
-  let current = -1;
-  let showTimeout = null;
+      const mindsetTl1 = gsap.timeline({
+        scrollTrigger: {
+          trigger: mTrigger1,
+          scrub: true,
+          start: "clamp(top bottom)",  
+          end: "bottom bottom",
+        }
+      });
+      mindsetTl1.to(progressBars[0], {
+        width: "100%",
+      });
 
-  /* ── helpers ── */
-  function hideAllMindsets() {
-    mindsetItems.forEach((item) => {
-      item.style.opacity = "0";
-      item.style.pointerEvents = "none";
-    });
-  }
+      const mindsetTl2 = gsap.timeline({
+        scrollTrigger: {
+          trigger: mTrigger2,
+          scrub: true,
+          start: "clamp(top bottom)",  
+          end: "bottom bottom",
+        }
+      });
+      mindsetTl2.to(mindsetItems[0], {
+        opacity: 0,
+        duration: 0.1,
+      })
+      .to(mindsetItems[1], {
+        opacity: 1,
+        duration: 0.1,
+      })
+      .to(progressBars[1], {
+        width: "100%",
+      },"<");
 
-  function updateMindset(index) {
-    if (index === current) return;
-    if (showTimeout) {
-      clearTimeout(showTimeout);
-      showTimeout = null;
+      const mindsetTl3 = gsap.timeline({
+        scrollTrigger: {
+          trigger: mTrigger3,
+          scrub: true,
+          start: "clamp(top bottom)",  
+          end: "bottom bottom",
+        }
+      });
+      mindsetTl3.to(mindsetItems[1], {
+        opacity: 0,
+        duration: 0.1,
+      })
+      .to(mindsetItems[2], {
+        opacity: 1,
+        duration: 0.1,
+      })
+      .to(progressBars[2], {
+        width: "100%",
+      },"<");
+      /*Fade in the absTitle2*/
+    
     }
 
-    const { bg, text, accent } = mindsets[index];
 
-    hideAllMindsets();
-
-    showTimeout = setTimeout(() => {
-      const active = mindsetItems[index];
-      active.style.opacity = "1";
-      active.style.pointerEvents = "auto";
-
-      sectionMindset.style.backgroundColor = bg;
-
-      mindsetItems.forEach((item) => {
-        item.querySelector(".mindset_title")?.style.setProperty("color", text);
-        item.querySelector(".mindset_tag")?.style.setProperty("color", text);
-        item
-          .querySelector(".mindset_subtitle")
-          ?.style.setProperty("color", text);
-      });
-    }, 0);
-
-    /* 3 — Controls and shared accent */
-    controlItems.forEach((ctrl, i) => {
-      ctrl
-        .querySelector(".mindset_control-number")
-        ?.style.setProperty("color", accent);
-      ctrl
-        .querySelector(".mindset_control-name")
-        ?.style.setProperty("color", accent);
-      ctrl.style.opacity = i === index ? "1" : "0.3";
-    });
-
-    /* 4 — Progress bars: reset active to 0 %, others stay full */
-    progressBars.forEach((bar, i) => {
-      bar.style.backgroundColor = accent;
-      bar.style.transition = "none"; // kills 100→0 flicker
-      bar.style.width = i === index ? "0%" : "100%";
-    });
-
-    /* 5 — Overlay colour */
-    if (bgAbsolute) bgAbsolute.style.color = accent;
-
-    current = index;
-  }
-
-  hideAllMindsets(); // start fully hidden
-
-  /* ────────────────────────── ScrollTrigger setup ────────────────────────── */
-  const st = ScrollTrigger.create({
-    trigger: sectionMindset,
-    start: "top top",
-    end: "bottom bottom",
-    scrub: true,
-    onUpdate: (self) => {
-      const total = mindsets.length;
-      const raw = self.progress * total;
-      const idx = Math.min(total - 1, Math.floor(raw));
-      const segProg = raw - idx;
-
-      if (idx !== current) updateMindset(idx);
-
-      const bar = progressBars[idx];
-      bar.style.transition = "none";
-      bar.style.width = `${(segProg * 100).toFixed(2)}%`;
-    },
-  });
-
-  const initialIdx = Math.min(
-    mindsets.length - 1,
-    Math.floor(st.progress * mindsets.length)
-  );
-  updateMindset(initialIdx);
+    mindsetAnimate();
 });
+// document.addEventListener("DOMContentLoaded", () => {
+
+//   const mindsetItems = document.querySelectorAll(".mindset_item");
+//   const controlItems = document.querySelectorAll(".mindset_control-item");
+//   const progressBars = Array.from(controlItems).map((el) =>
+//     el.querySelector(".progress-bar")
+//   );
+//   const sectionMindset = document.querySelector(".section_mindset");
+//   const bgAbsolute = document.querySelector(".bg-absolute.mindset");
+
+//   const mindsets = [
+//     { bg: "#273570", text: "white", accent: "white" },
+//     { bg: "#03FF86", text: "black", accent: "black" },
+//     { bg: "black", text: "#03FF86", accent: "#03FF86" },
+//   ];
+
+//   let current = -1;
+//   let showTimeout = null;
+
+//   /* ── helpers ── */
+//   function hideAllMindsets() {
+//     mindsetItems.forEach((item) => {
+//       item.style.opacity = "0";
+//       item.style.pointerEvents = "none";
+//     });
+//   }
+
+//   function updateMindset(index) {
+//     if (index === current) return;
+//     if (showTimeout) {
+//       clearTimeout(showTimeout);
+//       showTimeout = null;
+//     }
+
+//     const { bg, text, accent } = mindsets[index];
+
+//     hideAllMindsets();
+
+//     showTimeout = setTimeout(() => {
+//       const active = mindsetItems[index];
+//       active.style.opacity = "1";
+//       active.style.pointerEvents = "auto";
+
+//       sectionMindset.style.backgroundColor = bg;
+
+//       mindsetItems.forEach((item) => {
+//         item.querySelector(".mindset_title")?.style.setProperty("color", text);
+//         item.querySelector(".mindset_tag")?.style.setProperty("color", text);
+//         item
+//           .querySelector(".mindset_subtitle")
+//           ?.style.setProperty("color", text);
+//       });
+//     }, 0);
+
+//     /* 3 — Controls and shared accent */
+//     controlItems.forEach((ctrl, i) => {
+//       ctrl
+//         .querySelector(".mindset_control-number")
+//         ?.style.setProperty("color", accent);
+//       ctrl
+//         .querySelector(".mindset_control-name")
+//         ?.style.setProperty("color", accent);
+//       ctrl.style.opacity = i === index ? "1" : "0.3";
+//     });
+
+//     /* 4 — Progress bars: reset active to 0 %, others stay full */
+//     progressBars.forEach((bar, i) => {
+//       bar.style.backgroundColor = accent;
+//       bar.style.transition = "none"; // kills 100→0 flicker
+//       bar.style.width = i === index ? "0%" : "100%";
+//     });
+
+//     /* 5 — Overlay colour */
+//     if (bgAbsolute) bgAbsolute.style.color = accent;
+
+//     current = index;
+//   }
+
+//   hideAllMindsets(); // start fully hidden
+
+//   /* ────────────────────────── ScrollTrigger setup ────────────────────────── */
+//   const st = ScrollTrigger.create({
+//     trigger: sectionMindset,
+//     start: "top top",
+//     end: "bottom bottom",
+//     scrub: true,
+//     onUpdate: (self) => {
+//       const total = mindsets.length;
+//       const raw = self.progress * total;
+//       const idx = Math.min(total - 1, Math.floor(raw));
+//       const segProg = raw - idx;
+
+//       if (idx !== current) updateMindset(idx);
+
+//       const bar = progressBars[idx];
+//       bar.style.transition = "none";
+//       bar.style.width = `${(segProg * 100).toFixed(2)}%`;
+//     },
+//   });
+
+//   const initialIdx = Math.min(
+//     mindsets.length - 1,
+//     Math.floor(st.progress * mindsets.length)
+//   );
+//   updateMindset(initialIdx);
+// });
