@@ -588,7 +588,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       .to(mindsetItems[1], {
         opacity: 1,
         duration: 0.1,
-      })
+      },"<")
       .to(progressBars[1], {
         width: "100%",
       },"<");
@@ -608,7 +608,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       .to(mindsetItems[2], {
         opacity: 1,
         duration: 0.1,
-      })
+      },"<")
       .to(progressBars[2], {
         width: "100%",
       },"<");
