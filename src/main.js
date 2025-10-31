@@ -531,6 +531,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
 
 document.addEventListener("DOMContentLoaded", () => {
     function mindsetAnimate(){
+      console.log("mindset")
       const mindsets = [
         { bg: "#273570", text: "white", accent: "white" },
         { bg: "#03FF86", text: "black", accent: "black" },
