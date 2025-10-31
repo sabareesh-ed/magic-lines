@@ -560,7 +560,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       })
       .to(progressBars, {
         background: mindsets[0].accent,
-        duration: 0,
+        duration: 0.1,
       },"<")
       .to(controlItems[0], {
         opacity: 1,
@@ -584,7 +584,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       })
       .to(progressBars, {
         background: mindsets[1].accent,
-        duration: 0,
+        duration: 0.1,
       },"<")
       .to(controlItems[0], {
         opacity: 0.5,
@@ -617,7 +617,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       })
       .to(progressBars, {
         background: mindsets[2].accent,
-        duration: 0,
+        duration: 0.1,
       },"<")
       .to(controlItems[1], {
         opacity: 0.5,
