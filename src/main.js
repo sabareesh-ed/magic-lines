@@ -581,7 +581,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       });
       mindsetTl2.to(mindsetItems[0], {
         opacity: 0,
-        duration: 0.1,
+        duration: 0,
       })
       .to(progressBars[1], {
         background: mindsets[1].accent,
@@ -593,7 +593,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       },"<")
       .to(mindsetItems[1], {
         opacity: 1,
-        duration: 0.1,
+        duration: 0,
       },"<")
       .to(progressBars[1], {
         width: "100%",
@@ -609,7 +609,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       });
       mindsetTl3.to(mindsetItems[1], {
         opacity: 0,
-        duration: 0.1,
+        duration: 0,
       })
       .to(progressBars[2], {
         background: mindsets[2].accent,
@@ -621,7 +621,7 @@ window.addEventListener("load", () => ScrollTrigger.refresh());
       },"<")
       .to(mindsetItems[2], {
         opacity: 1,
-        duration: 0.1,
+        duration: 0,
       },"<")
       .to(progressBars[2], {
         width: "100%",
